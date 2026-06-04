@@ -470,6 +470,7 @@ class _HeroGraphicState extends State<HeroGraphic> with SingleTickerProviderStat
               return Container(
                 width: widget.size * 0.35,
                 height: widget.size * 0.35,
+                clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   color: PortfolioTheme.surfaceDark.withOpacity(0.85),
                   shape: BoxShape.circle,
@@ -486,11 +487,11 @@ class _HeroGraphicState extends State<HeroGraphic> with SingleTickerProviderStat
                   ],
                 ),
                 child: hasProfileImage
-                    ? ClipOval(
-                        child: PortfolioImage(
-                          imageSource: profile.profileImage,
-                          fit: BoxFit.cover,
-                        ),
+                    ? PortfolioImage(
+                        imageSource: profile.profileImage,
+                        width: widget.size * 0.35,
+                        height: widget.size * 0.35,
+                        fit: BoxFit.cover,
                       )
                     : const Icon(
                         Icons.terminal_rounded,
