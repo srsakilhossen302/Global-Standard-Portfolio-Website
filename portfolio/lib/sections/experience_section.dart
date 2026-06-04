@@ -100,54 +100,58 @@ class _TimelineItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Timeline indicator (circle and line)
-          Column(
-            children: [
-              Container(
-                width: 16,
-                height: 16,
-                decoration: BoxDecoration(
-                  gradient: PortfolioTheme.primaryGradient,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: PortfolioTheme.primary.withOpacity(0.4),
-                      blurRadius: 8,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-              ),
-              if (!isLast)
-                Expanded(
-                  child: Container(
-                    width: 2,
-                    color: isDark ? PortfolioTheme.borderDark : Colors.black12,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 24),
-
-          // Timeline Card Content
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 40.0),
-              child: _ExperienceCard(
-                role: role,
-                company: company,
-                duration: duration,
-                achievements: achievements,
-                isDark: isDark,
-              ),
+    return Stack(
+      children: [
+        // Timeline line
+        if (!isLast)
+          Positioned(
+            left: 7, // Center of the 16px circle
+            top: 16,
+            bottom: 0,
+            child: Container(
+              width: 2,
+              color: isDark ? PortfolioTheme.borderDark : Colors.black12,
             ),
           ),
-        ],
-      ),
+        
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Timeline indicator (circle)
+            Container(
+              width: 16,
+              height: 16,
+              margin: const EdgeInsets.only(top: 0),
+              decoration: BoxDecoration(
+                gradient: PortfolioTheme.primaryGradient,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: PortfolioTheme.primary.withOpacity(0.4),
+                    blurRadius: 8,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 24),
+
+            // Timeline Card Content
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 40.0),
+                child: _ExperienceCard(
+                  role: role,
+                  company: company,
+                  duration: duration,
+                  achievements: achievements,
+                  isDark: isDark,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
