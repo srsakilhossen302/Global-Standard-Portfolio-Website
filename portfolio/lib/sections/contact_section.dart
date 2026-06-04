@@ -121,7 +121,7 @@ class _ContactSectionState extends State<ContactSection> {
             ResponsiveWidget(
               mobile: Column(
                 children: [
-                  _buildContactDetails(isDark, phone),
+                  _buildContactDetails(isDark, phone, profile?.email ?? "sakil@example.com", profile?.location ?? "Dhaka, Bangladesh"),
                   const SizedBox(height: 40),
                   _buildContactForm(isDark),
                 ],
@@ -131,7 +131,7 @@ class _ContactSectionState extends State<ContactSection> {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: _buildContactDetails(isDark, phone),
+                    child: _buildContactDetails(isDark, phone, profile?.email ?? "sakil@example.com", profile?.location ?? "Dhaka, Bangladesh"),
                   ),
                   const SizedBox(width: 48),
                   Expanded(
@@ -147,7 +147,8 @@ class _ContactSectionState extends State<ContactSection> {
     });
   }
 
-  Widget _buildContactDetails(bool isDark, String phone) {
+  Widget _buildContactDetails(bool isDark, String phone, String email, String location) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -169,7 +170,7 @@ class _ContactSectionState extends State<ContactSection> {
         _ContactInfoTile(
           icon: Icons.alternate_email_rounded,
           label: "Email",
-          value: "sakil@example.com",
+          value: email,
           isDark: isDark,
         ),
         const SizedBox(height: 20),
@@ -183,9 +184,11 @@ class _ContactSectionState extends State<ContactSection> {
         _ContactInfoTile(
           icon: Icons.location_on_rounded,
           label: "Location",
-          value: "Dhaka, Bangladesh",
+          value: location,
           isDark: isDark,
         ),
+
+
       ],
     );
   }

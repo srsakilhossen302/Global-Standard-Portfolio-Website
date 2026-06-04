@@ -55,6 +55,7 @@ class HeroSection extends StatelessWidget {
                 tagline: tagline,
                 bio: bio,
                 cvUrl: cvUrl,
+                email: profile?.email ?? 'sakil@example.com',
                 onContactTap: onContactTap,
                 alignCenter: true,
                 isDark: isDark,
@@ -73,6 +74,7 @@ class HeroSection extends StatelessWidget {
                   tagline: tagline,
                   bio: bio,
                   cvUrl: cvUrl,
+                  email: profile?.email ?? 'sakil@example.com',
                   onContactTap: onContactTap,
                   alignCenter: false,
                   isDark: isDark,
@@ -98,6 +100,7 @@ class _HeroTextContent extends StatelessWidget {
   final String tagline;
   final String bio;
   final String cvUrl;
+  final String email;
   final VoidCallback onContactTap;
   final bool alignCenter;
   final bool isDark;
@@ -108,6 +111,7 @@ class _HeroTextContent extends StatelessWidget {
     required this.tagline,
     required this.bio,
     required this.cvUrl,
+    required this.email,
     required this.onContactTap,
     required this.alignCenter,
     required this.isDark,
@@ -249,7 +253,8 @@ class _HeroTextContent extends StatelessWidget {
             const SizedBox(width: 16),
             _SocialIcon(icon: Icons.chat_bubble_outline_rounded, url: 'https://linkedin.com', tooltip: 'LinkedIn'),
             const SizedBox(width: 16),
-            _SocialIcon(icon: Icons.alternate_email_rounded, url: 'mailto:sakil@example.com', tooltip: 'Email'),
+            _SocialIcon(icon: Icons.alternate_email_rounded, url: 'mailto:$email', tooltip: 'Email'),
+
           ],
         ),
       ],
@@ -463,44 +468,34 @@ class _HeroGraphicState extends State<HeroGraphic> with SingleTickerProviderStat
               ),
             ),
             // Center Element / Icon / Profile Image
-            Obx(() {
-              final profile = controller.profile.value;
-              final hasProfileImage = profile != null && profile.profileImage.trim().isNotEmpty;
-
-              return Container(
-                width: widget.size * 0.35,
-                height: widget.size * 0.35,
-                decoration: BoxDecoration(
-                  color: PortfolioTheme.surfaceDark.withOpacity(0.85),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: PortfolioTheme.primary.withOpacity(0.4),
-                    width: 1.5,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+            Container(
+              width: widget.size * 0.35,
+              height: widget.size * 0.35,
+              decoration: BoxDecoration(
+                color: PortfolioTheme.surfaceDark.withOpacity(0.85),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: PortfolioTheme.primary.withOpacity(0.4),
+                  width: 1.5,
                 ),
-                child: hasProfileImage
-                    ? ClipOval(
-                        child: PortfolioImage(
-                          imageSource: profile.profileImage,
-                          width: widget.size * 0.35,
-                          height: widget.size * 0.35,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : const Icon(
-                        Icons.terminal_rounded,
-                        color: Color(0xFF10B981),
-                        size: 32,
-                      ),
-              );
-            }),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: ClipOval(
+                child: PortfolioImage(
+                  imageSource: 'assets/images/696179481_1503014734869412_8236696213527085729_n.jpg',
+                  width: widget.size * 0.35,
+                  height: widget.size * 0.35,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+
           ],
         );
       },

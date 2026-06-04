@@ -295,6 +295,8 @@ class _ProfileTabState extends State<_ProfileTab> {
   late TextEditingController _philosophyCtrl;
   late TextEditingController _goalsCtrl;
   late TextEditingController _phoneCtrl;
+  late TextEditingController _emailCtrl;
+  late TextEditingController _locationCtrl;
   String _profileImage = '';
 
   @override
@@ -313,6 +315,8 @@ class _ProfileTabState extends State<_ProfileTab> {
     _philosophyCtrl = TextEditingController(text: profile?.developmentPhilosophy ?? '');
     _goalsCtrl = TextEditingController(text: profile?.careerGoals ?? '');
     _phoneCtrl = TextEditingController(text: profile?.phone ?? '');
+    _emailCtrl = TextEditingController(text: profile?.email ?? '');
+    _locationCtrl = TextEditingController(text: profile?.location ?? '');
     _profileImage = profile?.profileImage ?? '';
   }
 
@@ -329,6 +333,8 @@ class _ProfileTabState extends State<_ProfileTab> {
     _philosophyCtrl.dispose();
     _goalsCtrl.dispose();
     _phoneCtrl.dispose();
+    _emailCtrl.dispose();
+    _locationCtrl.dispose();
     super.dispose();
   }
 
@@ -348,7 +354,10 @@ class _ProfileTabState extends State<_ProfileTab> {
       careerGoals: _goalsCtrl.text.trim(),
       phone: _phoneCtrl.text.trim(),
       profileImage: _profileImage,
+      email: _emailCtrl.text.trim(),
+      location: _locationCtrl.text.trim(),
     );
+
 
     final success = await Get.find<AdminController>().updateProfile(updatedProfile);
     if (success) {
@@ -453,6 +462,28 @@ class _ProfileTabState extends State<_ProfileTab> {
               ],
             ),
             const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _emailCtrl,
+                    decoration: const InputDecoration(labelText: "Email Address", prefixIcon: Icon(Icons.email)),
+                    validator: (v) => v!.isEmpty ? 'Required' : null,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextFormField(
+                    controller: _locationCtrl,
+                    decoration: const InputDecoration(labelText: "Location", prefixIcon: Icon(Icons.location_on)),
+                    validator: (v) => v!.isEmpty ? 'Required' : null,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+
             TextFormField(
               controller: _bioCtrl,
               maxLines: 4,

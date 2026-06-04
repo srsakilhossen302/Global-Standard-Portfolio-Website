@@ -14,7 +14,10 @@ const PortfolioSchema = new mongoose.Schema({
     developmentPhilosophy: { type: String, default: '' },
     careerGoals: { type: String, default: '' },
     phone: { type: String, default: '' },
-    profileImage: { type: String, default: '' } // Base64 image
+    profileImage: { type: String, default: '' }, // Base64 image
+    email: { type: String, default: '' },
+    location: { type: String, default: '' }
+
   },
   skills: { type: Array, default: [] },
   experience: { type: Array, default: [] },

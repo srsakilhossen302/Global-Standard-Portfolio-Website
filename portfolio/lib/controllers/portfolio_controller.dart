@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,7 @@ class PortfolioController extends GetxController {
   // GlobalKeys for scroll sections (10 sections)
   final List<GlobalKey> sectionKeys = List.generate(10, (index) => GlobalKey());
   final ScrollController scrollController = ScrollController();
+  Timer? _pollingTimer;
 
   @override
   void onInit() {
@@ -34,10 +36,15 @@ class PortfolioController extends GetxController {
     fetchPortfolioData();
     // Monitor scroll changes to update active section index
     scrollController.addListener(_onScroll);
+    // Poll the backend for live updates every 15 seconds silently
+    _pollingTimer = Timer.periodic(const Duration(seconds: 15), (_) {
+      fetchPortfolioData(isSilent: true);
+    });
   }
 
   @override
   void onClose() {
+    _pollingTimer?.cancel();
     scrollController.removeListener(_onScroll);
     scrollController.dispose();
     super.onClose();
@@ -84,8 +91,10 @@ class PortfolioController extends GetxController {
   }
 
   // Fetch portfolio data from Node.js or load fallback offline data
-  Future<void> fetchPortfolioData() async {
-    isLoading.value = true;
+  Future<void> fetchPortfolioData({bool isSilent = false}) async {
+    if (!isSilent) {
+      isLoading.value = true;
+    }
     try {
       final response = await http.get(Uri.parse('$apiHost/portfolio')).timeout(
         const Duration(seconds: 3),
@@ -94,17 +103,22 @@ class PortfolioController extends GetxController {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         _parseData(data);
-      } else {
+      } else if (!isSilent) {
         _loadOfflineFallback();
       }
     } catch (e) {
       // Network error or timeout - fallback to offline data
       print('Fetch portfolio data failed, loading offline fallback: $e');
-      _loadOfflineFallback();
+      if (!isSilent) {
+        _loadOfflineFallback();
+      }
     } finally {
-      isLoading.value = false;
+      if (!isSilent) {
+        isLoading.value = false;
+      }
     }
   }
+
 
   void _parseData(Map<String, dynamic> data) {
     if (data['profile'] != null) {
@@ -184,8 +198,11 @@ class PortfolioController extends GetxController {
         "developmentPhilosophy": "I place a strong emphasis on clean code architecture (like Clean Architecture or MVC/MVVM), pixel-perfect UI designs, interactive animations, and stellar app performance. Whether it is a web platform, a mobile utility, or an API integration, I strive for excellence in every project.",
         "careerGoals": "To build scalable, robust mobile apps that run globally and collaborate in high-performing international teams.",
         "phone": "+880 1700-000000",
-        "profileImage": ""
+        "profileImage": "",
+        "email": "sakil@example.com",
+        "location": "Dhaka, Bangladesh"
       },
+
       "projects": [
         {
           "id": "proj-1",

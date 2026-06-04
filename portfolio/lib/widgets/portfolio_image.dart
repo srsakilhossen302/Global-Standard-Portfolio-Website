@@ -101,6 +101,7 @@ class PortfolioImage extends StatelessWidget {
 
   bool _isBase64(String str) {
     String clean = str.trim().replaceAll(RegExp(r'\s+'), '');
+    if (clean.length < 20) return false; // Base64 image strings are always longer
     if (clean.contains(',')) {
       clean = clean.split(',')[1];
     }
@@ -111,6 +112,7 @@ class PortfolioImage extends StatelessWidget {
     final regex = RegExp(r'^[a-zA-Z0-9+/]*={0,2}$');
     return regex.hasMatch(clean);
   }
+
 
   String _getCleanBase64(String str) {
     String clean = str.trim();

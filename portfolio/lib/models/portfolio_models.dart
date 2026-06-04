@@ -11,6 +11,8 @@ class Profile {
   final String careerGoals;
   final String phone;
   final String profileImage;
+  final String email;
+  final String location;
 
   const Profile({
     required this.name,
@@ -25,6 +27,8 @@ class Profile {
     required this.careerGoals,
     required this.phone,
     required this.profileImage,
+    required this.email,
+    required this.location,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -41,6 +45,8 @@ class Profile {
       careerGoals: json['careerGoals'] ?? '',
       phone: json['phone'] ?? '',
       profileImage: json['profileImage'] ?? '',
+      email: json['email'] ?? '',
+      location: json['location'] ?? '',
     );
   }
 
@@ -58,9 +64,12 @@ class Profile {
       'careerGoals': careerGoals,
       'phone': phone,
       'profileImage': profileImage,
+      'email': email,
+      'location': location,
     };
   }
 }
+
 
 class AiWorkflowPoint {
   final String title;
