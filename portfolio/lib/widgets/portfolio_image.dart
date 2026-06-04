@@ -100,8 +100,14 @@ class PortfolioImage extends StatelessWidget {
   }
 
   bool _isBase64(String str) {
-    final clean = str.trim().replaceAll(RegExp(r'\s+'), '');
-    if (clean.length % 4 != 0) return false;
+    String clean = str.trim().replaceAll(RegExp(r'\s+'), '');
+    if (clean.contains(',')) {
+      clean = clean.split(',')[1];
+    }
+    final remainder = clean.length % 4;
+    if (remainder != 0) {
+      clean = clean + '=' * (4 - remainder);
+    }
     final regex = RegExp(r'^[a-zA-Z0-9+/]*={0,2}$');
     return regex.hasMatch(clean);
   }
@@ -111,6 +117,11 @@ class PortfolioImage extends StatelessWidget {
     if (clean.contains(',')) {
       clean = clean.split(',')[1];
     }
-    return clean.replaceAll(RegExp(r'\s+'), '');
+    clean = clean.replaceAll(RegExp(r'\s+'), '');
+    final remainder = clean.length % 4;
+    if (remainder != 0) {
+      clean = clean + '=' * (4 - remainder);
+    }
+    return clean;
   }
 }
