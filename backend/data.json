@@ -1,0 +1,228 @@
+{
+  "profile": {
+    "name": "Sakil Hossen",
+    "title": "Flutter Mobile Application Developer",
+    "tagline": "Available for Hire & Projects",
+    "bio": "Results-driven Flutter Mobile Application Developer with hands-on experience building production-ready \nmobile applications for real-world business needs. Experienced in Flutter, Dart, GetX, Firebase, REST API \nintegration, payment gateway solutions, push notifications, real-time communication systems, and AI-assisted \ndevelopment workflows. Successfully delivered multiple end-to-end applications while collaborating directly \nwith clients,  \ngathering requirements, and transforming business ideas into scalable mobile products.",
+    "cvUrl": "https://github.com/sakil",
+    "experienceYears": "1+",
+    "completedProjects": "20+",
+    "happyClients": "25+",
+    "developmentPhilosophy": "I place a strong emphasis on clean code architecture (like Clean Architecture or MVC/MVVM), pixel-perfect UI designs, interactive animations, and stellar app performance. Whether it is a web platform, a mobile utility, or an API integration, I strive for excellence in every project.",
+    "careerGoals": "To build scalable, robust mobile apps that run globally and collaborate in high-performing international teams."
+  },
+  "projects": [
+    {
+      "id": "proj-1",
+      "title": "Quran International",
+      "description": "A multilingual Quran application designed to bring the holy book to a global audience. It features dynamic script scaling, offline audio recitations, bookmarks, translations, and robust searching, built with clean architecture.",
+      "image": "assets/images/quran_international.png",
+      "playStoreUrl": "https://play.google.com/store/apps",
+      "appStoreUrl": "https://apps.apple.com/app",
+      "githubUrl": "https://github.com/sakil/quran-international",
+      "tags": [
+        "Flutter",
+        "Dart",
+        "Clean Architecture",
+        "SQLite",
+        "Audio Player"
+      ],
+      "features": [
+        "Multilingual Translation Support (English, Bengali, Urdu, Spanish, etc.)",
+        "Offline Audio Recitation with verse-by-verse highlight syncing",
+        "Advanced bookmarking, indexing, and notes system",
+        "ATS-friendly clean, modern, readable typography settings"
+      ]
+    },
+    {
+      "id": "proj-2",
+      "title": "Live Stream App",
+      "description": "A high-performance live video streaming application with real-time comments, live reactions, audience interactions, and payment support. Built to handle low latency stream connections.",
+      "image": "assets/images/live_stream.png",
+      "playStoreUrl": "https://play.google.com/store/apps",
+      "appStoreUrl": "",
+      "githubUrl": "https://github.com/sakil/live-stream-app",
+      "tags": [
+        "Flutter",
+        "WebRTC",
+        "Agora SDK",
+        "WebSocket",
+        "Node.js"
+      ],
+      "features": [
+        "Ultra-low latency live video streaming with Agora SDK integration",
+        "Real-time chat feed with floating hearts and custom emoji animations",
+        "Virtual gifting and in-app purchase token system",
+        "Co-hosting and split-screen video capability"
+      ]
+    },
+    {
+      "id": "proj-3",
+      "title": "Restaurant Booking System",
+      "description": "A premium table booking and reservation management system for restaurants. Features visual table mapping, menu pre-ordering, custom notifications, and interactive scheduling.",
+      "image": "assets/images/restaurant_booking.png",
+      "playStoreUrl": "",
+      "appStoreUrl": "https://apps.apple.com/app",
+      "githubUrl": "https://github.com/sakil/restaurant-booking",
+      "tags": [
+        "Flutter Web",
+        "REST API",
+        "State Management",
+        "Google Maps"
+      ],
+      "features": [
+        "Interactive floor plan for selecting specific tables visually",
+        "Seamless reservation scheduling with calendar and push notification reminders",
+        "Pre-order meals directly from the digital menu during booking",
+        "Admin control panel for managers to manage bookings and menus"
+      ]
+    },
+    {
+      "id": "proj-4",
+      "title": "Job Booking System",
+      "description": "A comprehensive marketplace app connecting service providers with clients. Features scheduling, Stripe payments, real-time tracking of providers, and in-app push alerts.",
+      "image": "assets/images/job_booking.png",
+      "playStoreUrl": "https://play.google.com/store/apps",
+      "appStoreUrl": "https://apps.apple.com/app",
+      "githubUrl": "",
+      "tags": [
+        "Flutter",
+        "Firebase",
+        "Stripe Payment",
+        "Push Notifications",
+        "Dio"
+      ],
+      "features": [
+        "On-demand job scheduling with auto-matching algorithms",
+        "Integrated secure payments via Stripe and Apple/Google Pay",
+        "Real-time technician location tracking on interactive maps",
+        "Built-in rating and reviews system for quality assurance"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "category": "Mobile Development",
+      "items": [
+        "Flutter",
+        "Dart",
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "category": "State Management",
+      "items": [
+        "GetX",
+        "Provider"
+      ]
+    },
+    {
+      "category": "Backend Integration",
+      "items": [
+        "REST API",
+        "Firebase",
+        "Dio",
+        "HTTP"
+      ]
+    },
+    {
+      "category": "Payments",
+      "items": [
+        "Stripe",
+        "Google Pay",
+        "Apple Pay",
+        "In-App Purchase"
+      ]
+    },
+    {
+      "category": "Real-Time Systems",
+      "items": [
+        "WebSocket",
+        "Live Chat",
+        "Push Notifications"
+      ]
+    },
+    {
+      "category": "Developer Tools",
+      "items": [
+        "Git",
+        "GitHub",
+        "Postman",
+        "Android Studio",
+        "VS Code"
+      ]
+    },
+    {
+      "category": "AI Productivity",
+      "items": [
+        "Prompt Engineering",
+        "ChatGPT",
+        "Gemini",
+        "Claude",
+        "AI Workflow Optimization"
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "id": "exp-1",
+      "role": "Flutter Mobile Application Developer",
+      "company": "SparkTech Agency",
+      "duration": "2023 - Present",
+      "achievements": [
+        "Delivered 9+ premium production-ready mobile applications to global clients",
+        "Integrated complex payment gateways (Stripe, Google Pay, Apple Pay) in Flutter apps",
+        "Developed low-latency real-time systems using WebSockets, Agora, and Push Notifications",
+        "Collaborated with international developers and designers in remote agile environments",
+        "Managed successful production deployments to Google Play Store and Apple App Store"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": "edu-1",
+      "institution": "TMSS Polytechnic Institute",
+      "degree": "Diploma in Computer Science & Technology",
+      "duration": "2019 - 2023",
+      "details": "Focused on computer systems, database design, data structures, and core software engineering concepts."
+    },
+    {
+      "id": "edu-2",
+      "institution": "BD Calling Academy",
+      "degree": "Flutter App Development Training",
+      "duration": "2023 (6 Months)",
+      "details": "Intensive hands-on training in cross-platform mobile architecture, state management, and real-world project deployments."
+    }
+  ],
+  "references": [
+    {
+      "id": "ref-1",
+      "clientName": "Sarah Jenkins",
+      "clientCompany": "Product Director, TechNova",
+      "clientComment": "Sakil is an exceptional Flutter developer. He delivered our cross-platform MVP two weeks ahead of schedule. The animations are incredibly smooth and the code is very easy to read. Highly recommended!",
+      "clientRating": 5,
+      "clientImage": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+    },
+    {
+      "id": "ref-2",
+      "clientName": "Alex Rivera",
+      "clientCompany": "Founder, Vibez Streaming",
+      "clientComment": "Working with Sakil Hossen was a great experience. He helped us resolve major audio sync and performance issues in our app. His understanding of WebRTC and WebSockets is outstanding.",
+      "clientRating": 4.9,
+      "clientImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150"
+    },
+    {
+      "id": "ref-1780592956232",
+      "clientName": "sakil",
+      "clientCompany": "CEO",
+      "clientComment": "gdddddddddddddddddddddddddggf gfdf df df",
+      "clientRating": 5,
+      "clientImage": "rewwwtr"
+    }
+  ],
+  "admin": {
+    "passwordHash": "$2a$10$R/GX6xd1EgxvoZ9AXisffO9IgJ/pLo.v5YzvgohTWaJ2rybrjqxgq"
+  },
+  "messages": []
+}

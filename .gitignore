@@ -1,0 +1,28 @@
+# Ignore everything in the root directory
+/*
+
+# Except these folders and files:
+!/portfolio/
+!/backend/
+!/.gitignore
+
+# Inner ignore rules for portfolio (Flutter)
+portfolio/.dart_tool/
+portfolio/.flutter-plugins
+portfolio/.flutter-plugins-dependencies
+portfolio/.pub-cache/
+portfolio/build/
+portfolio/android/app/debug/
+portfolio/ios/Flutter/Generated.xcconfig
+portfolio/ios/Flutter/flutter_export_environment.sh
+portfolio/pubspec.lock
+
+# Inner ignore rules for backend (Node.js)
+backend/node_modules/
+backend/.env
+backend/package-lock.json
+
+# IDE settings
+.idea/
+*.iml
+.vscode/

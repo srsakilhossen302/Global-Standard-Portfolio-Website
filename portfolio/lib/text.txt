@@ -1,0 +1,205 @@
+Create a premium, modern, responsive, and fully offline-capable Portfolio Web Application for a professional Flutter Mobile Application Developer named Sakil Hossen.
+
+Project Goal:
+Build a world-class developer portfolio website that looks professional, clean, modern, and trustworthy. The design should feel like a portfolio of a software engineer working in international remote teams and global tech companies.
+
+Technology Requirements:
+
+* Flutter Web
+* Material 3 Design
+* Fully Offline Support
+* PWA (Progressive Web App)
+* Responsive for Mobile, Tablet, Laptop, and Desktop
+* No Backend Required
+* All data stored locally as JSON/Assets
+* Fast Loading Performance
+* SEO Friendly Structure
+* Clean Architecture
+* GetX State Management
+* Reusable Components
+
+Design Requirements:
+
+* Premium UI/UX
+* Modern Glassmorphism + Minimal Design
+* Consistent Color Palette
+* Professional Typography
+* Smooth Animations
+* Clean White Space
+* Dark Mode and Light Mode Support
+* Elegant Hover Effects
+* Professional Developer Branding
+
+Color Theme:
+Primary Color: #2563EB
+Secondary Color: #1E293B
+Accent Color: #06B6D4
+Background Light: #F8FAFC
+Background Dark: #0F172A
+
+Portfolio Sections:
+
+1. Hero Section
+
+* Professional introduction
+* Name: Sakil Hossen
+* Title: Flutter Mobile Application Developer
+* Professional tagline
+* Call To Action Buttons:
+
+  * Download CV
+  * View Projects
+  * Contact Me
+
+2. About Me
+
+* Professional summary
+* Years of experience
+* Development philosophy
+* Career goals
+
+3. Technical Skills
+   Categorized skill cards:
+
+Mobile Development
+
+* Flutter
+* Dart
+* Android
+* iOS
+
+State Management
+
+* GetX
+* Provider
+
+Backend Integration
+
+* REST API
+* Firebase
+* Dio
+* HTTP
+
+Payments
+
+* Stripe
+* Google Pay
+* Apple Pay
+* In-App Purchase
+
+Real-Time Systems
+
+* WebSocket
+* Live Chat
+* Push Notifications
+
+Developer Tools
+
+* Git
+* GitHub
+* Postman
+* Android Studio
+* VS Code
+
+AI Productivity
+
+* Prompt Engineering
+* ChatGPT
+* Gemini
+* Claude
+* AI Workflow Optimization
+
+4. Experience Timeline
+   SparkTech Agency
+   Flutter Mobile Application Developer
+
+Show achievements:
+
+* Delivered 9+ mobile applications
+* Payment integrations
+* Real-time systems
+* Client collaboration
+* Production deployments
+
+5. Featured Projects
+
+Quran International
+
+* Multilingual Quran Application
+* Audio Recitation
+* Bookmarking
+* Translation Support
+
+Live Stream App
+
+* Live Video Streaming
+* Real-Time Communication
+* Audience Interaction
+
+Restaurant Booking System
+
+* Reservation Management
+* Table Booking
+* Customer Experience
+
+Job Booking System
+
+* Appointment Scheduling
+* Payment Integration
+* Notifications
+
+Each project must include:
+
+* Screenshot Gallery
+* Project Description
+* Technologies Used
+* Features
+* GitHub Link
+* Live Demo Button
+
+6. AI Development Section
+   Display how AI is used professionally:
+
+* AI-Assisted Development
+* Prompt Engineering
+* Rapid Prototyping
+* Software Requirement Analysis
+* Development Productivity
+* Technical Research
+* AI-Powered Debugging
+
+7. Education
+   TMSS Polytechnic Institute
+   Diploma in Computer Science & Technology
+
+Training:
+BD Calling Academy
+Flutter App Development
+
+8. References
+   Professional references section with cards.
+
+9. Contact Section
+
+* Email
+* Phone
+* LinkedIn
+* GitHub
+* Location
+
+10. Footer
+    Professional branding and copyright.
+
+Additional Requirements:
+
+* Use reusable widgets everywhere
+* Follow clean folder structure
+* Production-ready code quality
+* Smooth page transitions
+* Professional animations
+* ATS-friendly content presentation
+* Fully offline operation after first load
+* Modern software engineer portfolio appearance
+* Should look suitable for Google, Microsoft, Turing, Lemon.io, Arc.dev, Upwork, Fiverr, and remote international job applications.
+
+Generate complete production-ready Flutter Web project structure, UI design, reusable widgets, routing architecture, theme management, local JSON data source, and responsive layouts.
