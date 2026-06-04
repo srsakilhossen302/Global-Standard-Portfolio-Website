@@ -61,13 +61,15 @@ class AiSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  'AI Development Workflow',
-                  style: GoogleFonts.outfit(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: isDark ? Colors.white : PortfolioTheme.secondary,
-                    letterSpacing: 0.5,
+                Expanded(
+                  child: Text(
+                    'AI Development Workflow',
+                    style: GoogleFonts.outfit(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : PortfolioTheme.secondary,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
               ],
@@ -149,17 +151,19 @@ class _AiPointCardState extends State<_AiPointCard> {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: widget.isDark
-              ? (_isHovered 
-                  ? PortfolioTheme.primary.withOpacity(0.06) 
-                  : PortfolioTheme.surfaceDark.withOpacity(0.4))
-              : (_isHovered 
-                  ? PortfolioTheme.primary.withOpacity(0.02) 
-                  : PortfolioTheme.surfaceLight),
+              ? (_isHovered
+                    ? PortfolioTheme.primary.withOpacity(0.06)
+                    : PortfolioTheme.surfaceDark.withOpacity(0.4))
+              : (_isHovered
+                    ? PortfolioTheme.primary.withOpacity(0.02)
+                    : PortfolioTheme.surfaceLight),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: _isHovered
                 ? PortfolioTheme.primary.withOpacity(0.5)
-                : (widget.isDark ? PortfolioTheme.borderDark : PortfolioTheme.borderLight),
+                : (widget.isDark
+                      ? PortfolioTheme.borderDark
+                      : PortfolioTheme.borderLight),
             width: 1.5,
           ),
           boxShadow: _isHovered ? PortfolioTheme.hoverGlowShadow : [],
@@ -172,19 +176,21 @@ class _AiPointCardState extends State<_AiPointCard> {
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: _isHovered 
-                    ? PortfolioTheme.accent.withOpacity(0.2) 
+                color: _isHovered
+                    ? PortfolioTheme.accent.withOpacity(0.2)
                     : PortfolioTheme.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
                 widget.icon,
-                color: _isHovered ? PortfolioTheme.accent : PortfolioTheme.primary,
+                color: _isHovered
+                    ? PortfolioTheme.accent
+                    : PortfolioTheme.primary,
                 size: 20,
               ),
             ),
             const SizedBox(width: 16),
-            
+
             // Text Content
             Expanded(
               child: Column(
@@ -195,7 +201,9 @@ class _AiPointCardState extends State<_AiPointCard> {
                     style: GoogleFonts.outfit(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: widget.isDark ? Colors.white : PortfolioTheme.secondary,
+                      color: widget.isDark
+                          ? Colors.white
+                          : PortfolioTheme.secondary,
                     ),
                   ),
                   const SizedBox(height: 6),

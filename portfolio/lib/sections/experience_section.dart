@@ -24,6 +24,7 @@ class ExperienceSection extends StatelessWidget {
           vertical: 80.0,
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Section Title
@@ -38,13 +39,15 @@ class ExperienceSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  'Work Experience',
-                  style: GoogleFonts.outfit(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: isDark ? Colors.white : PortfolioTheme.secondary,
-                    letterSpacing: 0.5,
+                Expanded(
+                  child: Text(
+                    'Work Experience',
+                    style: GoogleFonts.outfit(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : PortfolioTheme.secondary,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
               ],
@@ -57,12 +60,10 @@ class ExperienceSection extends StatelessWidget {
             const SizedBox(height: 50),
 
             // Vertical Timeline Layout
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: experienceList.length,
-              itemBuilder: (context, index) {
-                final exp = experienceList[index];
+            Column(
+              children: experienceList.asMap().entries.map((entry) {
+                final index = entry.key;
+                final exp = entry.value;
                 return _TimelineItem(
                   role: exp.role,
                   company: exp.company,
@@ -71,7 +72,7 @@ class ExperienceSection extends StatelessWidget {
                   isDark: isDark,
                   isLast: index == experienceList.length - 1,
                 );
-              },
+              }).toList(),
             ),
           ],
         ),
@@ -131,7 +132,7 @@ class _TimelineItem extends StatelessWidget {
             ],
           ),
           const SizedBox(width: 24),
-          
+
           // Timeline Card Content
           Expanded(
             child: Padding(
@@ -183,30 +184,35 @@ class _ExperienceCardState extends State<_ExperienceCard> {
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: widget.isDark
-              ? (_isHovered 
-                  ? PortfolioTheme.primary.withOpacity(0.05) 
-                  : PortfolioTheme.surfaceDark.withOpacity(0.4))
-              : (_isHovered 
-                  ? PortfolioTheme.primary.withOpacity(0.02) 
-                  : PortfolioTheme.surfaceLight),
+              ? (_isHovered
+                    ? PortfolioTheme.primary.withOpacity(0.05)
+                    : PortfolioTheme.surfaceDark.withOpacity(0.4))
+              : (_isHovered
+                    ? PortfolioTheme.primary.withOpacity(0.02)
+                    : PortfolioTheme.surfaceLight),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: _isHovered
                 ? PortfolioTheme.primary.withOpacity(0.5)
-                : (widget.isDark ? PortfolioTheme.borderDark : PortfolioTheme.borderLight),
+                : (widget.isDark
+                      ? PortfolioTheme.borderDark
+                      : PortfolioTheme.borderLight),
             width: 1.5,
           ),
-          boxShadow: _isHovered 
-              ? PortfolioTheme.hoverGlowShadow 
-              : (widget.isDark ? [] : [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  )
-                ]),
+          boxShadow: _isHovered
+              ? PortfolioTheme.hoverGlowShadow
+              : (widget.isDark
+                    ? []
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.02),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ]),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header: Role and Duration
@@ -215,6 +221,7 @@ class _ExperienceCardState extends State<_ExperienceCard> {
               children: [
                 Expanded(
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -222,7 +229,9 @@ class _ExperienceCardState extends State<_ExperienceCard> {
                         style: GoogleFonts.outfit(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: widget.isDark ? Colors.white : PortfolioTheme.secondary,
+                          color: widget.isDark
+                              ? Colors.white
+                              : PortfolioTheme.secondary,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -238,7 +247,10 @@ class _ExperienceCardState extends State<_ExperienceCard> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: PortfolioTheme.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
@@ -255,7 +267,7 @@ class _ExperienceCardState extends State<_ExperienceCard> {
               ],
             ),
             const SizedBox(height: 20),
-            
+
             // Achievement Bullet Points
             ...widget.achievements.map((achievement) {
               return Padding(
@@ -275,9 +287,9 @@ class _ExperienceCardState extends State<_ExperienceCard> {
                     Expanded(
                       child: Text(
                         achievement,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          height: 1.4,
-                        ),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(height: 1.4),
                       ),
                     ),
                   ],

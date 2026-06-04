@@ -39,13 +39,15 @@ class EducationSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  'Education & Training',
-                  style: GoogleFonts.outfit(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: isDark ? Colors.white : PortfolioTheme.secondary,
-                    letterSpacing: 0.5,
+                Expanded(
+                  child: Text(
+                    'Education & Training',
+                    style: GoogleFonts.outfit(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : PortfolioTheme.secondary,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
               ],
