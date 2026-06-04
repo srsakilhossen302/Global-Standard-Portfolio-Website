@@ -12,10 +12,7 @@ import '../widgets/portfolio_image.dart';
 class HeroSection extends StatelessWidget {
   final VoidCallback onContactTap;
 
-  const HeroSection({
-    super.key,
-    required this.onContactTap,
-  });
+  const HeroSection({super.key, required this.onContactTap});
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +24,13 @@ class HeroSection extends StatelessWidget {
     return Obx(() {
       final profile = controller.profile.value;
       final isDark = controller.isDarkMode.value;
-      
+
       final name = profile?.name ?? "Sakil Hossen";
       final title = profile?.title ?? "Flutter Mobile Application Developer";
       final tagline = profile?.tagline ?? "Available for Hire & Projects";
-      final bio = profile?.bio ?? "I design and build ultra-premium, high-performance, and responsive applications across Android, iOS, and Web. Passionate about beautiful UI/UX, micro-animations, and clean architecture.";
+      final bio =
+          profile?.bio ??
+          "I design and build ultra-premium, high-performance, and responsive applications across Android, iOS, and Web. Passionate about beautiful UI/UX, micro-animations, and clean architecture.";
       final cvUrl = profile?.cvUrl ?? "https://github.com/sakil";
 
       return Container(
@@ -84,7 +83,9 @@ class HeroSection extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: Center(
-                  child: HeroGraphic(size: size.width * 0.22 > 320 ? size.width * 0.22 : 320),
+                  child: HeroGraphic(
+                    size: size.width * 0.22 > 320 ? size.width * 0.22 : 320,
+                  ),
                 ),
               ),
             ],
@@ -120,8 +121,10 @@ class _HeroTextContent extends StatelessWidget {
 
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+    try {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      debugPrint('Could not launch $url: $e');
     }
   }
 
@@ -129,9 +132,15 @@ class _HeroTextContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<PortfolioController>();
     final profile = controller.profile.value;
-    final githubUrl = profile?.githubUrl.isNotEmpty == true ? profile!.githubUrl : 'https://github.com/sakil';
-    final linkedinUrl = profile?.linkedinUrl.isNotEmpty == true ? profile!.linkedinUrl : 'https://linkedin.com';
-    final alignment = alignCenter ? CrossAxisAlignment.center : CrossAxisAlignment.start;
+    final githubUrl = profile?.githubUrl.isNotEmpty == true
+        ? profile!.githubUrl
+        : 'https://github.com/sakil';
+    final linkedinUrl = profile?.linkedinUrl.isNotEmpty == true
+        ? profile!.linkedinUrl
+        : 'https://linkedin.com';
+    final alignment = alignCenter
+        ? CrossAxisAlignment.center
+        : CrossAxisAlignment.start;
     final textAlign = alignCenter ? TextAlign.center : TextAlign.start;
 
     return Column(
@@ -164,7 +173,9 @@ class _HeroTextContent extends StatelessWidget {
               Text(
                 tagline,
                 style: GoogleFonts.inter(
-                  color: isDark ? const Color(0xFF10B981) : PortfolioTheme.primary,
+                  color: isDark
+                      ? const Color(0xFF10B981)
+                      : PortfolioTheme.primary,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
@@ -174,7 +185,7 @@ class _HeroTextContent extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        
+
         // Name Header
         Text(
           "Hey, I am",
@@ -185,9 +196,8 @@ class _HeroTextContent extends StatelessWidget {
           ),
         ),
         ShaderMask(
-          shaderCallback: (bounds) => PortfolioTheme.primaryGradient.createShader(
-            Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-          ),
+          shaderCallback: (bounds) => PortfolioTheme.primaryGradient
+              .createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
           child: Text(
             name,
             textAlign: textAlign,
@@ -200,7 +210,7 @@ class _HeroTextContent extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        
+
         // Subtitle / Profession
         Text(
           title,
@@ -212,7 +222,7 @@ class _HeroTextContent extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        
+
         // Short bio
         SizedBox(
           width: 540,
@@ -223,7 +233,7 @@ class _HeroTextContent extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 36),
-        
+
         // Action Buttons
         Wrap(
           spacing: 16,
@@ -248,17 +258,28 @@ class _HeroTextContent extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 40),
-        
+
         // Social Media Icons
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _SocialIcon(assetPath: 'assets/images/github-icons.png', url: githubUrl, tooltip: 'GitHub'),
+            _SocialIcon(
+              assetPath: 'assets/images/github-icons.png',
+              url: githubUrl,
+              tooltip: 'GitHub',
+            ),
             const SizedBox(width: 16),
-            _SocialIcon(assetPath: 'assets/images/Linkedin-icons.png', url: linkedinUrl, tooltip: 'LinkedIn'),
+            _SocialIcon(
+              assetPath: 'assets/images/Linkedin-icons.png',
+              url: linkedinUrl,
+              tooltip: 'LinkedIn',
+            ),
             const SizedBox(width: 16),
-            _SocialIcon(assetPath: 'assets/images/email-icons.webp', url: 'mailto:$email', tooltip: 'Email'),
-
+            _SocialIcon(
+              assetPath: 'assets/images/email-icons.webp',
+              url: 'mailto:$email',
+              tooltip: 'Email',
+            ),
           ],
         ),
       ],
@@ -289,9 +310,11 @@ class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
     final controller = Get.find<PortfolioController>();
     final isDark = controller.isDarkMode.value;
 
-    final gradient = widget.isPrimary 
-        ? PortfolioTheme.primaryGradient 
-        : const LinearGradient(colors: [Colors.transparent, Colors.transparent]);
+    final gradient = widget.isPrimary
+        ? PortfolioTheme.primaryGradient
+        : const LinearGradient(
+            colors: [Colors.transparent, Colors.transparent],
+          );
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -302,27 +325,29 @@ class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           gradient: gradient,
-          border: widget.isPrimary 
-              ? null 
+          border: widget.isPrimary
+              ? null
               : Border.all(
-                  color: _isHovered 
-                      ? PortfolioTheme.primary 
+                  color: _isHovered
+                      ? PortfolioTheme.primary
                       : (isDark ? PortfolioTheme.borderDark : Colors.black26),
                   width: 1.5,
                 ),
-          boxShadow: widget.isPrimary && _isHovered 
-              ? PortfolioTheme.hoverGlowShadow 
+          boxShadow: widget.isPrimary && _isHovered
+              ? PortfolioTheme.hoverGlowShadow
               : [],
         ),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
-            foregroundColor: widget.isPrimary 
-                ? Colors.white 
+            foregroundColor: widget.isPrimary
+                ? Colors.white
                 : (isDark ? Colors.white : PortfolioTheme.secondary),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
             elevation: 0,
           ),
           onPressed: widget.onPressed,
@@ -360,8 +385,10 @@ class _SocialIconState extends State<_SocialIcon> {
 
   Future<void> _launchUrl() async {
     final uri = Uri.parse(widget.url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+    try {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      debugPrint('Could not launch ${widget.url}: $e');
     }
   }
 
@@ -381,13 +408,15 @@ class _SocialIconState extends State<_SocialIcon> {
             duration: const Duration(milliseconds: 200),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: _isHovered 
-                  ? PortfolioTheme.primary.withOpacity(0.15) 
-                  : (isDark ? const Color(0x0CFFFFFF) : Colors.black.withOpacity(0.04)),
+              color: _isHovered
+                  ? PortfolioTheme.primary.withOpacity(0.15)
+                  : (isDark
+                        ? const Color(0x0CFFFFFF)
+                        : Colors.black.withOpacity(0.04)),
               shape: BoxShape.circle,
               border: Border.all(
-                color: _isHovered 
-                    ? PortfolioTheme.primary 
+                color: _isHovered
+                    ? PortfolioTheme.primary
                     : (isDark ? PortfolioTheme.borderDark : Colors.black12),
                 width: 1,
               ),
@@ -408,16 +437,14 @@ class _SocialIconState extends State<_SocialIcon> {
 class HeroGraphic extends StatefulWidget {
   final double size;
 
-  const HeroGraphic({
-    super.key,
-    required this.size,
-  });
+  const HeroGraphic({super.key, required this.size});
 
   @override
   State<HeroGraphic> createState() => _HeroGraphicState();
 }
 
-class _HeroGraphicState extends State<HeroGraphic> with SingleTickerProviderStateMixin {
+class _HeroGraphicState extends State<HeroGraphic>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 
   @override
@@ -491,14 +518,14 @@ class _HeroGraphicState extends State<HeroGraphic> with SingleTickerProviderStat
               ),
               child: ClipOval(
                 child: PortfolioImage(
-                  imageSource: 'assets/images/696179481_1503014734869412_8236696213527085729_n.jpg',
+                  imageSource:
+                      'assets/images/696179481_1503014734869412_8236696213527085729_n.jpg',
                   width: widget.size * 0.35,
                   height: widget.size * 0.35,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-
           ],
         );
       },
@@ -535,11 +562,11 @@ class CyberOrbPainter extends CustomPainter {
     // 2. Draw rotating constellation nodes
     final double baseAngle = rotationValue * 2 * math.pi;
     final int nodesCount = 6;
-    
+
     // Outer Node Ring
     paintLine.color = primaryColor.withOpacity(0.35);
     paintLine.strokeWidth = 1.0;
-    
+
     final List<Offset> outerNodes = [];
     for (int i = 0; i < nodesCount; i++) {
       final double angle = baseAngle + (i * 2 * math.pi / nodesCount);
@@ -548,13 +575,19 @@ class CyberOrbPainter extends CustomPainter {
       final double y = center.dy + nodeRadius * math.sin(angle);
       final nodePos = Offset(x, y);
       outerNodes.add(nodePos);
-      
+
       // Draw glow ring node
       final nodePaint = Paint()
         ..color = primaryColor
         ..style = PaintingStyle.fill;
       canvas.drawCircle(nodePos, 4, nodePaint);
-      canvas.drawCircle(nodePos, 8, Paint()..color = primaryColor.withOpacity(0.15)..style = PaintingStyle.fill);
+      canvas.drawCircle(
+        nodePos,
+        8,
+        Paint()
+          ..color = primaryColor.withOpacity(0.15)
+          ..style = PaintingStyle.fill,
+      );
     }
 
     // Inner Node Ring (rotates in opposite direction)
@@ -573,7 +606,13 @@ class CyberOrbPainter extends CustomPainter {
         ..color = accentColor
         ..style = PaintingStyle.fill;
       canvas.drawCircle(nodePos, 3, nodePaint);
-      canvas.drawCircle(nodePos, 6, Paint()..color = accentColor.withOpacity(0.15)..style = PaintingStyle.fill);
+      canvas.drawCircle(
+        nodePos,
+        6,
+        Paint()
+          ..color = accentColor.withOpacity(0.15)
+          ..style = PaintingStyle.fill,
+      );
     }
 
     // Connect nodes with thin network lines
@@ -581,7 +620,7 @@ class CyberOrbPainter extends CustomPainter {
       ..color = primaryColor.withOpacity(0.08)
       ..strokeWidth = 0.8
       ..style = PaintingStyle.stroke;
-    
+
     for (var outer in outerNodes) {
       for (var inner in innerNodes) {
         final dist = (outer - inner).distance;
@@ -602,7 +641,7 @@ class CyberOrbPainter extends CustomPainter {
       stops: const [0.0, 0.35, 0.7, 1.0],
       transform: GradientRotation(baseAngle),
     );
-    
+
     ringPaint.shader = gradient.createShader(rect);
     canvas.drawArc(rect, 0, 2 * math.pi, false, ringPaint);
   }
