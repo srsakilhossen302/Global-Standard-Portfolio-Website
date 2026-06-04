@@ -20,14 +20,15 @@ class PortfolioImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (imageSource.trim().isEmpty) {
+    final source = imageSource.trim();
+    if (source.isEmpty) {
       return _buildFallback();
     }
 
     // 1. Check if the image is a base64 string
-    if (imageSource.startsWith('data:image') || _isBase64(imageSource)) {
+    if (source.startsWith('data:image') || _isBase64(source)) {
       try {
-        final cleanBase64 = _getCleanBase64(imageSource);
+        final cleanBase64 = _getCleanBase64(source);
         final bytes = base64Decode(cleanBase64);
         return Image.memory(
           bytes,
@@ -43,9 +44,9 @@ class PortfolioImage extends StatelessWidget {
     }
 
     // 2. Check if the image is a web URL
-    if (imageSource.startsWith('http://') || imageSource.startsWith('https://')) {
+    if (source.startsWith('http://') || source.startsWith('https://')) {
       return Image.network(
-        imageSource,
+        source,
         width: width,
         height: height,
         fit: fit,
@@ -73,7 +74,7 @@ class PortfolioImage extends StatelessWidget {
 
     // 3. Fallback to Asset Image
     return Image.asset(
-      imageSource,
+      source,
       width: width,
       height: height,
       fit: fit,
@@ -99,15 +100,17 @@ class PortfolioImage extends StatelessWidget {
   }
 
   bool _isBase64(String str) {
-    if (str.length % 4 != 0) return false;
+    final clean = str.trim().replaceAll(RegExp(r'\s+'), '');
+    if (clean.length % 4 != 0) return false;
     final regex = RegExp(r'^[a-zA-Z0-9+/]*={0,2}$');
-    return regex.hasMatch(str);
+    return regex.hasMatch(clean);
   }
 
   String _getCleanBase64(String str) {
-    if (str.contains(',')) {
-      return str.split(',')[1];
+    String clean = str.trim();
+    if (clean.contains(',')) {
+      clean = clean.split(',')[1];
     }
-    return str;
+    return clean.replaceAll(RegExp(r'\s+'), '');
   }
 }
