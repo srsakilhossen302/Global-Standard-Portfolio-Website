@@ -297,6 +297,8 @@ class _ProfileTabState extends State<_ProfileTab> {
   late TextEditingController _phoneCtrl;
   late TextEditingController _emailCtrl;
   late TextEditingController _locationCtrl;
+  late TextEditingController _githubUrlCtrl;
+  late TextEditingController _linkedinUrlCtrl;
   String _profileImage = '';
 
   @override
@@ -317,6 +319,8 @@ class _ProfileTabState extends State<_ProfileTab> {
     _phoneCtrl = TextEditingController(text: profile?.phone ?? '');
     _emailCtrl = TextEditingController(text: profile?.email ?? '');
     _locationCtrl = TextEditingController(text: profile?.location ?? '');
+    _githubUrlCtrl = TextEditingController(text: profile?.githubUrl ?? '');
+    _linkedinUrlCtrl = TextEditingController(text: profile?.linkedinUrl ?? '');
     _profileImage = profile?.profileImage ?? '';
   }
 
@@ -335,6 +339,8 @@ class _ProfileTabState extends State<_ProfileTab> {
     _phoneCtrl.dispose();
     _emailCtrl.dispose();
     _locationCtrl.dispose();
+    _githubUrlCtrl.dispose();
+    _linkedinUrlCtrl.dispose();
     super.dispose();
   }
 
@@ -356,6 +362,8 @@ class _ProfileTabState extends State<_ProfileTab> {
       profileImage: _profileImage,
       email: _emailCtrl.text.trim(),
       location: _locationCtrl.text.trim(),
+      githubUrl: _githubUrlCtrl.text.trim(),
+      linkedinUrl: _linkedinUrlCtrl.text.trim(),
     );
 
 
@@ -476,6 +484,26 @@ class _ProfileTabState extends State<_ProfileTab> {
                   child: TextFormField(
                     controller: _locationCtrl,
                     decoration: const InputDecoration(labelText: "Location", prefixIcon: Icon(Icons.location_on)),
+                    validator: (v) => v!.isEmpty ? 'Required' : null,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _githubUrlCtrl,
+                    decoration: const InputDecoration(labelText: "GitHub URL", prefixIcon: Icon(Icons.link)),
+                    validator: (v) => v!.isEmpty ? 'Required' : null,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextFormField(
+                    controller: _linkedinUrlCtrl,
+                    decoration: const InputDecoration(labelText: "LinkedIn URL", prefixIcon: Icon(Icons.link)),
                     validator: (v) => v!.isEmpty ? 'Required' : null,
                   ),
                 ),
@@ -901,6 +929,7 @@ class _ReviewsTab extends StatelessWidget {
     final commentCtrl = TextEditingController(text: ref?.clientComment ?? '');
     final ratingCtrl = TextEditingController(text: ref?.clientRating.toString() ?? '5.0');
     final imgCtrl = TextEditingController(text: ref?.clientImage ?? '');
+    final screenshotCtrl = TextEditingController(text: ref?.reviewImage ?? '');
 
     showDialog(
       context: context,
@@ -955,6 +984,50 @@ class _ReviewsTab extends StatelessWidget {
                       ),
                     ),
                   ],
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: screenshotCtrl,
+                          decoration: const InputDecoration(
+                            labelText: "Fiverr Review Screenshot (URL or Base64)",
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        icon: const Icon(Icons.upload_file_rounded),
+                        tooltip: "Upload screenshot file",
+                        onPressed: () async {
+                          final base64Image = await pickImageAsBase64();
+                          if (base64Image != null) {
+                            setDialogState(() {
+                              screenshotCtrl.text = base64Image;
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  if (screenshotCtrl.text.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      height: 100,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: PortfolioImage(
+                          imageSource: screenshotCtrl.text,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -970,6 +1043,7 @@ class _ReviewsTab extends StatelessWidget {
                   clientComment: commentCtrl.text.trim(),
                   clientRating: double.tryParse(ratingCtrl.text) ?? 5.0,
                   clientImage: imgCtrl.text.trim(),
+                  reviewImage: screenshotCtrl.text.trim(),
                 );
 
                 final admin = Get.find<AdminController>();

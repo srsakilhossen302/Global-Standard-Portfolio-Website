@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -127,6 +128,9 @@ class _HeroTextContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<PortfolioController>();
+    final profile = controller.profile.value;
+    final githubUrl = profile?.githubUrl.isNotEmpty == true ? profile!.githubUrl : 'https://github.com/sakil';
+    final linkedinUrl = profile?.linkedinUrl.isNotEmpty == true ? profile!.linkedinUrl : 'https://linkedin.com';
     final alignment = alignCenter ? CrossAxisAlignment.center : CrossAxisAlignment.start;
     final textAlign = alignCenter ? TextAlign.center : TextAlign.start;
 
@@ -249,11 +253,11 @@ class _HeroTextContent extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _SocialIcon(icon: Icons.code_rounded, url: 'https://github.com/sakil', tooltip: 'GitHub'),
+            _SocialIcon(assetPath: 'assets/images/github-icons.png', url: githubUrl, tooltip: 'GitHub'),
             const SizedBox(width: 16),
-            _SocialIcon(icon: Icons.chat_bubble_outline_rounded, url: 'https://linkedin.com', tooltip: 'LinkedIn'),
+            _SocialIcon(assetPath: 'assets/images/Linkedin-icons.png', url: linkedinUrl, tooltip: 'LinkedIn'),
             const SizedBox(width: 16),
-            _SocialIcon(icon: Icons.alternate_email_rounded, url: 'mailto:$email', tooltip: 'Email'),
+            _SocialIcon(assetPath: 'assets/images/email-icons.webp', url: 'mailto:$email', tooltip: 'Email'),
 
           ],
         ),
@@ -337,12 +341,12 @@ class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
 }
 
 class _SocialIcon extends StatefulWidget {
-  final IconData icon;
+  final String assetPath;
   final String url;
   final String tooltip;
 
   const _SocialIcon({
-    required this.icon,
+    required this.assetPath,
     required this.url,
     required this.tooltip,
   });
@@ -388,12 +392,11 @@ class _SocialIconState extends State<_SocialIcon> {
                 width: 1,
               ),
             ),
-            child: Icon(
-              widget.icon,
-              color: _isHovered 
-                  ? PortfolioTheme.primary 
-                  : (isDark ? Colors.white : PortfolioTheme.secondary),
-              size: 20,
+            child: Image.asset(
+              widget.assetPath,
+              width: 20,
+              height: 20,
+              fit: BoxFit.contain,
             ),
           ),
         ),

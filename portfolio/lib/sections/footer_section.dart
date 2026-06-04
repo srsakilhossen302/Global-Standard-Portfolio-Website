@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,6 +20,14 @@ class FooterSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<PortfolioController>();
     final isDark = controller.isDarkMode.value;
+    final profile = controller.profile.value;
+    final email = profile?.email ?? '';
+    final githubUrl = profile?.githubUrl.isNotEmpty == true
+        ? profile!.githubUrl
+        : 'https://github.com/sakil';
+    final linkedinUrl = profile?.linkedinUrl.isNotEmpty == true
+        ? profile!.linkedinUrl
+        : 'https://linkedin.com';
 
     return Container(
       width: double.infinity,
@@ -27,7 +36,9 @@ class FooterSection extends StatelessWidget {
         color: isDark ? const Color(0xFF0A0F1D) : const Color(0xFFE2E8F0),
         border: Border(
           top: BorderSide(
-            color: isDark ? PortfolioTheme.borderDark : PortfolioTheme.borderLight,
+            color: isDark
+                ? PortfolioTheme.borderDark
+                : PortfolioTheme.borderLight,
             width: 1,
           ),
         ),
@@ -68,35 +79,39 @@ class FooterSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          
+
           // Social Icons row
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _FooterSocialButton(
-                icon: Icons.code_rounded,
-                onPressed: () => _launchUrl('https://github.com/sakil'),
+                assetPath: 'assets/images/github-icons.png',
+                onPressed: () => _launchUrl(githubUrl),
                 isDark: isDark,
               ),
               const SizedBox(width: 12),
               _FooterSocialButton(
-                icon: Icons.chat_bubble_outline_rounded,
-                onPressed: () => _launchUrl('https://linkedin.com'),
+                assetPath: 'assets/images/Linkedin-icons.png',
+                onPressed: () => _launchUrl(linkedinUrl),
                 isDark: isDark,
               ),
               const SizedBox(width: 12),
               _FooterSocialButton(
-                icon: Icons.alternate_email_rounded,
-                onPressed: () => _launchUrl('mailto:sakil@example.com'),
+                assetPath: 'assets/images/email-icons.webp',
+                onPressed: () => _launchUrl(
+                  email.isNotEmpty
+                      ? 'mailto:$email'
+                      : 'mailto:sakil@example.com',
+                ),
                 isDark: isDark,
               ),
             ],
           ),
           const SizedBox(height: 24),
-          
+
           const Divider(height: 1, indent: 40, endIndent: 40),
           const SizedBox(height: 24),
-          
+
           // Copyright details
           Text(
             "© 2026 Sakil Hossen. All Rights Reserved.",
@@ -112,12 +127,12 @@ class FooterSection extends StatelessWidget {
 }
 
 class _FooterSocialButton extends StatefulWidget {
-  final IconData icon;
+  final String assetPath;
   final VoidCallback onPressed;
   final bool isDark;
 
   const _FooterSocialButton({
-    required this.icon,
+    required this.assetPath,
     required this.onPressed,
     required this.isDark,
   });
@@ -140,21 +155,22 @@ class _FooterSocialButtonState extends State<_FooterSocialButton> {
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: _isHovered 
+            color: _isHovered
                 ? PortfolioTheme.primary.withOpacity(0.1)
                 : Colors.transparent,
             shape: BoxShape.circle,
             border: Border.all(
-              color: _isHovered ? PortfolioTheme.primary : (widget.isDark ? Colors.white10 : Colors.black12),
+              color: _isHovered
+                  ? PortfolioTheme.primary
+                  : (widget.isDark ? Colors.white10 : Colors.black12),
               width: 1,
             ),
           ),
-          child: Icon(
-            widget.icon,
-            color: _isHovered 
-                ? PortfolioTheme.primary 
-                : (widget.isDark ? const Color(0xFF94A3B8) : const Color(0xFF475569)),
-            size: 16,
+          child: Image.asset(
+            widget.assetPath,
+            width: 16,
+            height: 16,
+            fit: BoxFit.contain,
           ),
         ),
       ),

@@ -16,8 +16,9 @@ const PortfolioSchema = new mongoose.Schema({
     phone: { type: String, default: '' },
     profileImage: { type: String, default: '' }, // Base64 image
     email: { type: String, default: '' },
-    location: { type: String, default: '' }
-
+    location: { type: String, default: '' },
+    githubUrl: { type: String, default: '' },
+    linkedinUrl: { type: String, default: '' }
   },
   skills: { type: Array, default: [] },
   experience: { type: Array, default: [] },
@@ -45,7 +46,8 @@ const ReferenceSchema = new mongoose.Schema({
   clientCompany: { type: String, default: '' },
   clientComment: { type: String, default: '' },
   clientRating: { type: Number, default: 5.0 },
-  clientImage: { type: String, default: '' }
+  clientImage: { type: String, default: '' },
+  reviewImage: { type: String, default: '' }
 }, { timestamps: true });
 
 // Message Schema (Contact Inbox Messages)

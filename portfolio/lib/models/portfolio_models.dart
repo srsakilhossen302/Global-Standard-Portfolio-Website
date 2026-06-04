@@ -13,6 +13,8 @@ class Profile {
   final String profileImage;
   final String email;
   final String location;
+  final String githubUrl;
+  final String linkedinUrl;
 
   const Profile({
     required this.name,
@@ -29,6 +31,8 @@ class Profile {
     required this.profileImage,
     required this.email,
     required this.location,
+    required this.githubUrl,
+    required this.linkedinUrl,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -47,6 +51,8 @@ class Profile {
       profileImage: json['profileImage'] ?? '',
       email: json['email'] ?? '',
       location: json['location'] ?? '',
+      githubUrl: json['githubUrl'] ?? '',
+      linkedinUrl: json['linkedinUrl'] ?? '',
     );
   }
 
@@ -66,6 +72,8 @@ class Profile {
       'profileImage': profileImage,
       'email': email,
       'location': location,
+      'githubUrl': githubUrl,
+      'linkedinUrl': linkedinUrl,
     };
   }
 }
@@ -202,6 +210,7 @@ class ClientReference {
   final String clientComment;
   final double clientRating;
   final String clientImage;
+  final String reviewImage;
 
   const ClientReference({
     required this.id,
@@ -210,6 +219,7 @@ class ClientReference {
     required this.clientComment,
     required this.clientRating,
     required this.clientImage,
+    required this.reviewImage,
   });
 
   factory ClientReference.fromJson(Map<String, dynamic> json) {
@@ -220,6 +230,7 @@ class ClientReference {
       clientComment: json['clientComment'] ?? '',
       clientRating: (json['clientRating'] as num?)?.toDouble() ?? 5.0,
       clientImage: json['clientImage'] ?? '',
+      reviewImage: json['reviewImage'] ?? '',
     );
   }
 
@@ -231,6 +242,7 @@ class ClientReference {
       'clientComment': clientComment,
       'clientRating': clientRating,
       'clientImage': clientImage,
+      'reviewImage': reviewImage,
     };
   }
 }

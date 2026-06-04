@@ -85,6 +85,7 @@ class ReferencesSection extends StatelessWidget {
                       comment: ref.clientComment,
                       rating: ref.clientRating,
                       image: ref.clientImage,
+                      reviewImage: ref.reviewImage,
                       isDark: isDark,
                     );
                   },
@@ -104,6 +105,7 @@ class _TestimonialCard extends StatefulWidget {
   final String comment;
   final double rating;
   final String image;
+  final String reviewImage;
   final bool isDark;
 
   const _TestimonialCard({
@@ -112,6 +114,7 @@ class _TestimonialCard extends StatefulWidget {
     required this.comment,
     required this.rating,
     required this.image,
+    required this.reviewImage,
     required this.isDark,
   });
 
@@ -226,16 +229,92 @@ class _TestimonialCardState extends State<_TestimonialCard> {
                 
                 // Rating stars
                 Row(
-                  children: List.generate(5, (index) {
-                    final starVal = index + 1;
-                    if (widget.rating >= starVal) {
-                      return const Icon(Icons.star_rounded, color: Colors.amber, size: 16);
-                    } else if (widget.rating >= starVal - 0.5) {
-                      return const Icon(Icons.star_half_rounded, color: Colors.amber, size: 16);
-                    } else {
-                      return Icon(Icons.star_border_rounded, color: Colors.grey.shade400, size: 16);
-                    }
-                  }),
+                  children: [
+                    Row(
+                      children: List.generate(5, (index) {
+                        final starVal = index + 1;
+                        if (widget.rating >= starVal) {
+                          return const Icon(Icons.star_rounded, color: Colors.amber, size: 16);
+                        } else if (widget.rating >= starVal - 0.5) {
+                          return const Icon(Icons.star_half_rounded, color: Colors.amber, size: 16);
+                        } else {
+                          return Icon(Icons.star_border_rounded, color: Colors.grey.shade400, size: 16);
+                        }
+                      }),
+                    ),
+                    if (widget.reviewImage.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      Tooltip(
+                        message: "View Fiverr Review Proof",
+                        child: InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: widget.isDark
+                                        ? const Color(0xFF0F172A)
+                                        : Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  padding: const EdgeInsets.all(16),
+                                  constraints: BoxConstraints(
+                                    maxHeight: MediaQuery.of(context).size.height * 0.8,
+                                    maxWidth: 600,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Fiverr Review Proof",
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: widget.isDark
+                                                  ? Colors.white
+                                                  : PortfolioTheme.secondary,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: const Icon(Icons.close_rounded),
+                                            onPressed: () => Navigator.pop(context),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Expanded(
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: SingleChildScrollView(
+                                            child: PortfolioImage(
+                                              imageSource: widget.reviewImage,
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Icon(
+                            Icons.verified_rounded,
+                            color: Colors.green,
+                            size: 18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ],
             ),

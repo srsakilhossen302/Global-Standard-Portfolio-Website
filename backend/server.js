@@ -286,7 +286,8 @@ app.post('/api/references', authenticateToken, async (req, res) => {
       clientCompany: req.body.clientCompany || '',
       clientComment: req.body.clientComment || '',
       clientRating: parseFloat(req.body.clientRating) || 5.0,
-      clientImage: req.body.clientImage || ''
+      clientImage: req.body.clientImage || '',
+      reviewImage: req.body.reviewImage || ''
     });
 
     await newRef.save();
@@ -312,6 +313,7 @@ app.put('/api/references/:id', authenticateToken, async (req, res) => {
     ref.clientComment = req.body.clientComment !== undefined ? req.body.clientComment : ref.clientComment;
     ref.clientRating = req.body.clientRating !== undefined ? parseFloat(req.body.clientRating) : ref.clientRating;
     ref.clientImage = req.body.clientImage !== undefined ? req.body.clientImage : ref.clientImage;
+    ref.reviewImage = req.body.reviewImage !== undefined ? req.body.reviewImage : ref.reviewImage;
 
     await ref.save();
     res.json({ success: true, reference: ref });
