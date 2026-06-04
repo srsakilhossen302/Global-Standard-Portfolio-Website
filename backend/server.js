@@ -80,6 +80,7 @@ app.get('/api/portfolio', (req, res) => {
     skills: db.skills || [],
     experience: db.experience || [],
     education: db.education || [],
+    aiWorkflow: db.aiWorkflow || [],
     references: db.references || []
   };
   res.json(publicData);
@@ -314,6 +315,30 @@ app.put('/api/experience', authenticateToken, (req, res) => {
     }
   }
   res.status(400).json({ error: 'Invalid experience payload' });
+});
+
+// 12a. Update Education List
+app.put('/api/education', authenticateToken, (req, res) => {
+  const db = readDB();
+  if (Array.isArray(req.body.education)) {
+    db.education = req.body.education;
+    if (writeDB(db)) {
+      return res.json({ success: true, education: db.education });
+    }
+  }
+  res.status(400).json({ error: 'Invalid education payload' });
+});
+
+// 12b. Update AI Workflow List
+app.put('/api/ai', authenticateToken, (req, res) => {
+  const db = readDB();
+  if (Array.isArray(req.body.aiWorkflow)) {
+    db.aiWorkflow = req.body.aiWorkflow;
+    if (writeDB(db)) {
+      return res.json({ success: true, aiWorkflow: db.aiWorkflow });
+    }
+  }
+  res.status(400).json({ error: 'Invalid AI workflow payload' });
 });
 
 // 13. Get all Inbox Messages (Admin Only)

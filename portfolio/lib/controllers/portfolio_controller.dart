@@ -15,6 +15,7 @@ class PortfolioController extends GetxController {
   final RxList<SkillCategory> skills = <SkillCategory>[].obs;
   final RxList<Experience> experience = <Experience>[].obs;
   final RxList<Education> education = <Education>[].obs;
+  final RxList<AiWorkflowPoint> aiWorkflow = <AiWorkflowPoint>[].obs;
   final RxList<ClientReference> references = <ClientReference>[].obs;
 
   final RxBool isLoading = true.obs;
@@ -139,6 +140,11 @@ class PortfolioController extends GetxController {
           .map((r) => ClientReference.fromJson(r))
           .toList();
     }
+    if (data['aiWorkflow'] != null) {
+      aiWorkflow.value = (data['aiWorkflow'] as List)
+          .map((a) => AiWorkflowPoint.fromJson(a))
+          .toList();
+    }
   }
 
   // Submit contact form to server
@@ -176,7 +182,9 @@ class PortfolioController extends GetxController {
         "completedProjects": "20+",
         "happyClients": "10+",
         "developmentPhilosophy": "I place a strong emphasis on clean code architecture (like Clean Architecture or MVC/MVVM), pixel-perfect UI designs, interactive animations, and stellar app performance. Whether it is a web platform, a mobile utility, or an API integration, I strive for excellence in every project.",
-        "careerGoals": "To build scalable, robust mobile apps that run globally and collaborate in high-performing international teams."
+        "careerGoals": "To build scalable, robust mobile apps that run globally and collaborate in high-performing international teams.",
+        "phone": "+880 1700-000000",
+        "profileImage": ""
       },
       "projects": [
         {
@@ -321,6 +329,38 @@ class PortfolioController extends GetxController {
           "clientComment": "Working with Sakil Hossen was a great experience. He helped us resolve major audio sync and performance issues in our app. His understanding of WebRTC and WebSockets is outstanding.",
           "clientRating": 4.9,
           "clientImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150"
+        }
+      ],
+      "aiWorkflow": [
+        {
+          "title": "AI-Assisted Development",
+          "description": "Utilizing advanced code generation tools to write boilerplate, speed up syntax declarations, and improve software delivery timeframes.",
+          "icon": "code"
+        },
+        {
+          "title": "Prompt Engineering",
+          "description": "Formulating detailed, contextual prompts to extract high-quality code structures, solutions to algorithms, and mock dataset configurations.",
+          "icon": "psychology"
+        },
+        {
+          "title": "Rapid Prototyping",
+          "description": "Spawning mock application mockups, state models, and JSON API payloads swiftly to demonstrate project feasibility in record time.",
+          "icon": "bolt"
+        },
+        {
+          "title": "Requirement Analysis",
+          "description": "Summarizing lengthy software specifications and user stories to map architectural diagrams and draft precise database models.",
+          "icon": "analytics"
+        },
+        {
+          "title": "Development Productivity",
+          "description": "Streamlining IDE setup workflows, script automation, and linter debugging to maintain optimal concentration on business logic coding.",
+          "icon": "auto_awesome"
+        },
+        {
+          "title": "AI-Powered Debugging",
+          "description": "Analyzing stack traces and memory leaks with intelligent search queries to troubleshoot issues across multi-threaded operations quickly.",
+          "icon": "bug_report"
         }
       ]
     };

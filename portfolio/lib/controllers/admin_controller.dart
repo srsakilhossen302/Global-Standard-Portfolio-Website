@@ -284,4 +284,50 @@ class AdminController extends GetxController {
     }
     return false;
   }
+
+  Future<bool> updateEducation(List<Education> eduList) async {
+    isSaving.value = true;
+    try {
+      final response = await http.put(
+        Uri.parse('$apiHost/education'),
+        headers: headers,
+        body: json.encode({
+          'education': eduList.map((e) => e.toJson()).toList(),
+        }),
+      ).timeout(const Duration(seconds: 4));
+
+      if (response.statusCode == 200) {
+        Get.find<PortfolioController>().fetchPortfolioData();
+        return true;
+      }
+    } catch (e) {
+      print('Update education error: $e');
+    } finally {
+      isSaving.value = false;
+    }
+    return false;
+  }
+
+  Future<bool> updateAiWorkflow(List<AiWorkflowPoint> aiList) async {
+    isSaving.value = true;
+    try {
+      final response = await http.put(
+        Uri.parse('$apiHost/ai'),
+        headers: headers,
+        body: json.encode({
+          'aiWorkflow': aiList.map((e) => e.toJson()).toList(),
+        }),
+      ).timeout(const Duration(seconds: 4));
+
+      if (response.statusCode == 200) {
+        Get.find<PortfolioController>().fetchPortfolioData();
+        return true;
+      }
+    } catch (e) {
+      print('Update AI workflow error: $e');
+    } finally {
+      isSaving.value = false;
+    }
+    return false;
+  }
 }

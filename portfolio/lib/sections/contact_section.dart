@@ -73,76 +73,81 @@ class _ContactSectionState extends State<ContactSection> {
   Widget build(BuildContext context) {
     final controller = Get.find<PortfolioController>();
     final size = MediaQuery.of(context).size;
-    final isDark = controller.isDarkMode.value;
-    final isDesktop = ResponsiveWidget.isDesktop(context);
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? size.width * 0.08 : 24.0,
-        vertical: 80.0,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Section Title
-          Row(
-            children: [
-              Container(
-                width: 32,
-                height: 4,
-                decoration: BoxDecoration(
-                  gradient: PortfolioTheme.primaryGradient,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                'Contact Me',
-                style: GoogleFonts.outfit(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : PortfolioTheme.secondary,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            "Let's work together! Leave a message below or reach out directly:",
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 50),
+    return Obx(() {
+      final isDark = controller.isDarkMode.value;
+      final isDesktop = ResponsiveWidget.isDesktop(context);
+      final profile = controller.profile.value;
+      final phone = profile?.phone ?? "+880 1700-000000";
 
-          ResponsiveWidget(
-            mobile: Column(
+      return Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: isDesktop ? size.width * 0.08 : 24.0,
+          vertical: 80.0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Section Title
+            Row(
               children: [
-                _buildContactDetails(isDark),
-                const SizedBox(height: 40),
-                _buildContactForm(isDark),
-              ],
-            ),
-            desktop: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: _buildContactDetails(isDark),
+                Container(
+                  width: 32,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    gradient: PortfolioTheme.primaryGradient,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
-                const SizedBox(width: 48),
-                Expanded(
-                  flex: 3,
-                  child: _buildContactForm(isDark),
+                const SizedBox(width: 12),
+                Text(
+                  'Contact Me',
+                  style: GoogleFonts.outfit(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? Colors.white : PortfolioTheme.secondary,
+                    letterSpacing: 0.5,
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+            const SizedBox(height: 12),
+            Text(
+              "Let's work together! Leave a message below or reach out directly:",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 50),
+
+            ResponsiveWidget(
+              mobile: Column(
+                children: [
+                  _buildContactDetails(isDark, phone),
+                  const SizedBox(height: 40),
+                  _buildContactForm(isDark),
+                ],
+              ),
+              desktop: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: _buildContactDetails(isDark, phone),
+                  ),
+                  const SizedBox(width: 48),
+                  Expanded(
+                    flex: 3,
+                    child: _buildContactForm(isDark),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
-  Widget _buildContactDetails(bool isDark) {
+  Widget _buildContactDetails(bool isDark, String phone) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -171,7 +176,7 @@ class _ContactSectionState extends State<ContactSection> {
         _ContactInfoTile(
           icon: Icons.phone_android_rounded,
           label: "Phone",
-          value: "+880 1700-000000",
+          value: phone,
           isDark: isDark,
         ),
         const SizedBox(height: 20),

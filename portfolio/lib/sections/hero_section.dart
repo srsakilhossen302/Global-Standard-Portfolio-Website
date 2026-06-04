@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../controllers/portfolio_controller.dart';
 import '../theme/portfolio_theme.dart';
 import '../widgets/responsive_widget.dart';
+import '../widgets/portfolio_image.dart';
 
 class HeroSection extends StatelessWidget {
   final VoidCallback onContactTap;
@@ -428,6 +429,10 @@ class _HeroGraphicState extends State<HeroGraphic> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<PortfolioController>();
+    final profile = controller.profile.value;
+    final hasProfileImage = profile != null && profile.profileImage.trim().isNotEmpty;
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -459,7 +464,7 @@ class _HeroGraphicState extends State<HeroGraphic> with SingleTickerProviderStat
                 secondaryColor: const Color(0xFF10B981),
               ),
             ),
-            // Center Element / Icon
+            // Center Element / Icon / Profile Image
             Container(
               width: widget.size * 0.35,
               height: widget.size * 0.35,
@@ -478,10 +483,18 @@ class _HeroGraphicState extends State<HeroGraphic> with SingleTickerProviderStat
                   ),
                 ],
               ),
-              child: const Icon(
-                Icons.terminal_rounded,
-                color: Color(0xFF10B981),
-                size: 32,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: hasProfileImage
+                    ? PortfolioImage(
+                        imageSource: profile.profileImage,
+                        fit: BoxFit.cover,
+                      )
+                    : const Icon(
+                        Icons.terminal_rounded,
+                        color: Color(0xFF10B981),
+                        size: 32,
+                      ),
               ),
             ),
           ],

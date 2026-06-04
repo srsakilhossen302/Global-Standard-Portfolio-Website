@@ -7,6 +7,7 @@ import '../models/portfolio_models.dart';
 import '../models/project_model.dart';
 import '../theme/portfolio_theme.dart';
 import '../widgets/portfolio_image.dart';
+import '../widgets/image_picker_helper.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -23,7 +24,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 8, vsync: this);
   }
 
   @override
@@ -103,6 +104,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
           ],
           bottom: TabBar(
             controller: _tabController,
+            isScrollable: true,
             labelColor: PortfolioTheme.primary,
             unselectedLabelColor: isDark ? Colors.white70 : Colors.black87,
             indicatorColor: PortfolioTheme.primary,
@@ -111,6 +113,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
               Tab(icon: Icon(Icons.person_outline_rounded), text: "Edit Profile"),
               Tab(icon: Icon(Icons.folder_copy_outlined), text: "Manage Projects"),
               Tab(icon: Icon(Icons.star_outline_rounded), text: "Manage Reviews"),
+              Tab(icon: Icon(Icons.school_outlined), text: "Education"),
+              Tab(icon: Icon(Icons.work_outline_rounded), text: "Work Experience"),
+              Tab(icon: Icon(Icons.psychology_outlined), text: "Skills"),
+              Tab(icon: Icon(Icons.auto_awesome_outlined), text: "AI Workflow"),
             ],
           ),
         ),
@@ -123,6 +129,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
               _ProfileTab(isDark: isDark),
               _ProjectsTab(isDark: isDark),
               _ReviewsTab(isDark: isDark),
+              _EducationTab(isDark: isDark),
+              _ExperienceTab(isDark: isDark),
+              _SkillsTab(isDark: isDark),
+              _AiWorkflowTab(isDark: isDark),
             ],
           ),
         ),
@@ -284,6 +294,8 @@ class _ProfileTabState extends State<_ProfileTab> {
   late TextEditingController _clientsCtrl;
   late TextEditingController _philosophyCtrl;
   late TextEditingController _goalsCtrl;
+  late TextEditingController _phoneCtrl;
+  String _profileImage = '';
 
   @override
   void initState() {
@@ -300,6 +312,8 @@ class _ProfileTabState extends State<_ProfileTab> {
     _clientsCtrl = TextEditingController(text: profile?.happyClients ?? '');
     _philosophyCtrl = TextEditingController(text: profile?.developmentPhilosophy ?? '');
     _goalsCtrl = TextEditingController(text: profile?.careerGoals ?? '');
+    _phoneCtrl = TextEditingController(text: profile?.phone ?? '');
+    _profileImage = profile?.profileImage ?? '';
   }
 
   @override
@@ -314,6 +328,7 @@ class _ProfileTabState extends State<_ProfileTab> {
     _clientsCtrl.dispose();
     _philosophyCtrl.dispose();
     _goalsCtrl.dispose();
+    _phoneCtrl.dispose();
     super.dispose();
   }
 
@@ -331,6 +346,8 @@ class _ProfileTabState extends State<_ProfileTab> {
       happyClients: _clientsCtrl.text.trim(),
       developmentPhilosophy: _philosophyCtrl.text.trim(),
       careerGoals: _goalsCtrl.text.trim(),
+      phone: _phoneCtrl.text.trim(),
+      profileImage: _profileImage,
     );
 
     final success = await Get.find<AdminController>().updateProfile(updatedProfile);
@@ -357,6 +374,47 @@ class _ProfileTabState extends State<_ProfileTab> {
             const SizedBox(height: 24),
             Row(
               children: [
+                CircleAvatar(
+                  radius: 36,
+                  backgroundColor: PortfolioTheme.primary.withOpacity(0.1),
+                  child: ClipOval(
+                    child: SizedBox(
+                      width: 72,
+                      height: 72,
+                      child: PortfolioImage(imageSource: _profileImage),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.image_search_rounded),
+                  label: const Text("Upload Profile Image"),
+                  onPressed: () async {
+                    final base64Image = await pickImageAsBase64();
+                    if (base64Image != null) {
+                      setState(() {
+                        _profileImage = base64Image;
+                      });
+                    }
+                  },
+                ),
+                if (_profileImage.isNotEmpty) ...[
+                  const SizedBox(width: 12),
+                  TextButton.icon(
+                    icon: const Icon(Icons.delete_rounded, color: Colors.redAccent),
+                    label: const Text("Remove", style: TextStyle(color: Colors.redAccent)),
+                    onPressed: () {
+                      setState(() {
+                        _profileImage = '';
+                      });
+                    },
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
                     controller: _nameCtrl,
@@ -375,10 +433,24 @@ class _ProfileTabState extends State<_ProfileTab> {
               ],
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              controller: _taglineCtrl,
-              decoration: const InputDecoration(labelText: "Hero Status / Tagline", prefixIcon: Icon(Icons.announcement)),
-              validator: (v) => v!.isEmpty ? 'Required' : null,
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _taglineCtrl,
+                    decoration: const InputDecoration(labelText: "Hero Status / Tagline", prefixIcon: Icon(Icons.announcement)),
+                    validator: (v) => v!.isEmpty ? 'Required' : null,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextFormField(
+                    controller: _phoneCtrl,
+                    decoration: const InputDecoration(labelText: "Phone Number", prefixIcon: Icon(Icons.phone)),
+                    validator: (v) => v!.isEmpty ? 'Required' : null,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -405,7 +477,7 @@ class _ProfileTabState extends State<_ProfileTab> {
                 Expanded(
                   child: TextFormField(
                     controller: _expYearsCtrl,
-                    decoration: const InputDecoration(labelText: "Experience (e.g. 3+)", prefixIcon: Icon(Icons.timeline)),
+                    decoration: const InputDecoration(labelText: "Experience (e.g. 1+)", prefixIcon: Icon(Icons.timeline)),
                     validator: (v) => v!.isEmpty ? 'Required' : null,
                   ),
                 ),
@@ -421,7 +493,7 @@ class _ProfileTabState extends State<_ProfileTab> {
                 Expanded(
                   child: TextFormField(
                     controller: _clientsCtrl,
-                    decoration: const InputDecoration(labelText: "Happy Clients (e.g. 10+)", prefixIcon: Icon(Icons.people_outline)),
+                    decoration: const InputDecoration(labelText: "Happy Clients (e.g. 25+)", prefixIcon: Icon(Icons.people_outline)),
                     validator: (v) => v!.isEmpty ? 'Required' : null,
                   ),
                 ),
@@ -590,65 +662,102 @@ class _ProjectsTab extends StatelessWidget {
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(isEdit ? "Edit Project" : "Add Project"),
-        content: SizedBox(
-          width: 500,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(controller: titleCtrl, decoration: const InputDecoration(labelText: "Project Title")),
-                const SizedBox(height: 12),
-                TextField(controller: descCtrl, maxLines: 3, decoration: const InputDecoration(labelText: "About / Description")),
-                const SizedBox(height: 12),
-                TextField(controller: imgCtrl, decoration: const InputDecoration(labelText: "Image Path (e.g. assets/images/quran_international.png or URL)")),
-                const SizedBox(height: 12),
-                TextField(controller: playCtrl, decoration: const InputDecoration(labelText: "Google Play Store Link")),
-                const SizedBox(height: 12),
-                TextField(controller: appCtrl, decoration: const InputDecoration(labelText: "Apple App Store Link")),
-                const SizedBox(height: 12),
-                TextField(controller: gitCtrl, decoration: const InputDecoration(labelText: "GitHub Link")),
-                const SizedBox(height: 12),
-                TextField(controller: tagsCtrl, decoration: const InputDecoration(labelText: "Tags (comma-separated, e.g. Flutter, Dart, SQLite)")),
-                const SizedBox(height: 12),
-                TextField(controller: featuresCtrl, maxLines: 4, decoration: const InputDecoration(labelText: "Key Features (one per line)")),
-              ],
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(isEdit ? "Edit Project" : "Add Project"),
+          content: SizedBox(
+            width: 500,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(controller: titleCtrl, decoration: const InputDecoration(labelText: "Project Title")),
+                  const SizedBox(height: 12),
+                  TextField(controller: descCtrl, maxLines: 3, decoration: const InputDecoration(labelText: "About / Description")),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: imgCtrl,
+                          decoration: const InputDecoration(
+                            labelText: "Image (Asset path or Base64)",
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        icon: const Icon(Icons.upload_file_rounded),
+                        tooltip: "Upload image file",
+                        onPressed: () async {
+                          final base64Image = await pickImageAsBase64();
+                          if (base64Image != null) {
+                            setDialogState(() {
+                              imgCtrl.text = base64Image;
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  if (imgCtrl.text.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: PortfolioImage(imageSource: imgCtrl.text),
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 12),
+                  TextField(controller: playCtrl, decoration: const InputDecoration(labelText: "Google Play Store Link")),
+                  const SizedBox(height: 12),
+                  TextField(controller: appCtrl, decoration: const InputDecoration(labelText: "Apple App Store Link")),
+                  const SizedBox(height: 12),
+                  TextField(controller: gitCtrl, decoration: const InputDecoration(labelText: "GitHub Link")),
+                  const SizedBox(height: 12),
+                  TextField(controller: tagsCtrl, decoration: const InputDecoration(labelText: "Tags (comma-separated, e.g. Flutter, Dart)")),
+                  const SizedBox(height: 12),
+                  TextField(controller: featuresCtrl, maxLines: 4, decoration: const InputDecoration(labelText: "Key Features (one per line)")),
+                ],
+              ),
             ),
           ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+            ElevatedButton(
+              onPressed: () async {
+                final newProj = Project(
+                  id: isEdit ? project.id : 'proj-${DateTime.now().millisecondsSinceEpoch}',
+                  title: titleCtrl.text.trim(),
+                  description: descCtrl.text.trim(),
+                  image: imgCtrl.text.trim(),
+                  playStoreUrl: playCtrl.text.trim(),
+                  appStoreUrl: appCtrl.text.trim(),
+                  githubUrl: gitCtrl.text.trim(),
+                  tags: tagsCtrl.text.split(',').map((t) => t.trim()).where((t) => t.isNotEmpty).toList(),
+                  features: featuresCtrl.text.split('\n').map((f) => f.trim()).where((f) => f.isNotEmpty).toList(),
+                );
+
+                final admin = Get.find<AdminController>();
+                bool success = false;
+                if (isEdit) {
+                  success = await admin.updateProject(newProj);
+                } else {
+                  success = await admin.addProject(newProj);
+                }
+
+                if (success) {
+                  Navigator.pop(context);
+                  Get.snackbar('Success', 'Project saved successfully', backgroundColor: Colors.green, colorText: Colors.white);
+                }
+              },
+              child: const Text("Save"),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
-          ElevatedButton(
-            onPressed: () async {
-              final newProj = Project(
-                id: isEdit ? project.id : 'proj-${DateTime.now().millisecondsSinceEpoch}',
-                title: titleCtrl.text.trim(),
-                description: descCtrl.text.trim(),
-                image: imgCtrl.text.trim(),
-                playStoreUrl: playCtrl.text.trim(),
-                appStoreUrl: appCtrl.text.trim(),
-                githubUrl: gitCtrl.text.trim(),
-                tags: tagsCtrl.text.split(',').map((t) => t.trim()).where((t) => t.isNotEmpty).toList(),
-                features: featuresCtrl.text.split('\n').map((f) => f.trim()).where((f) => f.isNotEmpty).toList(),
-              );
-
-              final admin = Get.find<AdminController>();
-              bool success = false;
-              if (isEdit) {
-                success = await admin.updateProject(newProj);
-              } else {
-                success = await admin.addProject(newProj);
-              }
-
-              if (success) {
-                Navigator.pop(context);
-                Get.snackbar('Success', 'Project updated successfully', backgroundColor: Colors.green, colorText: Colors.white);
-              }
-            },
-            child: const Text("Save"),
-          ),
-        ],
       ),
     );
   }
@@ -702,8 +811,9 @@ class _ReviewsTab extends StatelessWidget {
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       leading: CircleAvatar(
                         radius: 24,
-                        backgroundImage: NetworkImage(ref.clientImage.startsWith('http') ? ref.clientImage : 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150'),
-                        child: ref.clientImage.startsWith('http') ? null : const Icon(Icons.person),
+                        child: ClipOval(
+                          child: PortfolioImage(imageSource: ref.clientImage),
+                        ),
                       ),
                       title: Text(ref.clientName, style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
                       subtitle: Text("${ref.clientCompany} - Rating: ${ref.clientRating}"),
@@ -763,23 +873,223 @@ class _ReviewsTab extends StatelessWidget {
 
     showDialog(
       context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(isEdit ? "Edit Client Review" : "Add Client Review"),
+          content: SizedBox(
+            width: 500,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: "Client Name")),
+                  const SizedBox(height: 12),
+                  TextField(controller: compCtrl, decoration: const InputDecoration(labelText: "Company / Role")),
+                  const SizedBox(height: 12),
+                  TextField(controller: commentCtrl, maxLines: 4, decoration: const InputDecoration(labelText: "Review Comment")),
+                  const SizedBox(height: 12),
+                  TextField(controller: ratingCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: "Rating (e.g. 5.0)")),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: imgCtrl,
+                          decoration: const InputDecoration(
+                            labelText: "Client Photo (URL or Base64)",
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        icon: const Icon(Icons.upload_file_rounded),
+                        tooltip: "Upload image file",
+                        onPressed: () async {
+                          final base64Image = await pickImageAsBase64();
+                          if (base64Image != null) {
+                            setDialogState(() {
+                              imgCtrl.text = base64Image;
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  if (imgCtrl.text.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    CircleAvatar(
+                      radius: 30,
+                      child: ClipOval(
+                        child: PortfolioImage(imageSource: imgCtrl.text),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+            ElevatedButton(
+              onPressed: () async {
+                final newRef = ClientReference(
+                  id: isEdit ? ref.id : 'ref-${DateTime.now().millisecondsSinceEpoch}',
+                  clientName: nameCtrl.text.trim(),
+                  clientCompany: compCtrl.text.trim(),
+                  clientComment: commentCtrl.text.trim(),
+                  clientRating: double.tryParse(ratingCtrl.text) ?? 5.0,
+                  clientImage: imgCtrl.text.trim(),
+                );
+
+                final admin = Get.find<AdminController>();
+                bool success = false;
+                if (isEdit) {
+                  success = await admin.updateReference(newRef);
+                } else {
+                  success = await admin.addReference(newRef);
+                }
+
+                if (success) {
+                  Navigator.pop(context);
+                  Get.snackbar('Success', 'Recommendation saved successfully', backgroundColor: Colors.green, colorText: Colors.white);
+                }
+              },
+              child: const Text("Save"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// =======================
+// 5. EDUCATION TAB
+// =======================
+class _EducationTab extends StatelessWidget {
+  final bool isDark;
+  const _EducationTab({required this.isDark});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<PortfolioController>();
+
+    return Obx(() {
+      final educationList = controller.education;
+
+      return Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Manage Education & Training",
+                  style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: PortfolioTheme.primary,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () => _openEducationForm(context, null),
+                  icon: const Icon(Icons.add_rounded),
+                  label: const Text("Add New Education"),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Expanded(
+              child: ListView.builder(
+                itemCount: educationList.length,
+                itemBuilder: (context, index) {
+                  final edu = educationList[index];
+                  return Card(
+                    color: isDark ? PortfolioTheme.surfaceDark.withOpacity(0.5) : Colors.white,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      title: Text(edu.institution, style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
+                      subtitle: Text("${edu.degree} (${edu.duration})"),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit_rounded, color: Colors.blueAccent),
+                            onPressed: () => _openEducationForm(context, edu),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent),
+                            onPressed: () => _confirmDelete(context, index),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  void _confirmDelete(BuildContext context, int index) {
+    showDialog(
+      context: context,
       builder: (context) => AlertDialog(
-        title: Text(isEdit ? "Edit Client Review" : "Add Client Review"),
+        title: const Text("Delete Education Record"),
+        content: const Text("Are you sure you want to delete this education entry?"),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+            onPressed: () async {
+              final controller = Get.find<PortfolioController>();
+              final admin = Get.find<AdminController>();
+              final List<Education> newList = List.from(controller.education);
+              newList.removeAt(index);
+              final success = await admin.updateEducation(newList);
+              Navigator.pop(context);
+              if (success) {
+                Get.snackbar('Success', 'Education entry deleted', backgroundColor: Colors.green, colorText: Colors.white);
+              }
+            },
+            child: const Text("Delete"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _openEducationForm(BuildContext context, Education? edu) {
+    final isEdit = edu != null;
+    final instCtrl = TextEditingController(text: edu?.institution ?? '');
+    final degCtrl = TextEditingController(text: edu?.degree ?? '');
+    final durCtrl = TextEditingController(text: edu?.duration ?? '');
+    final detCtrl = TextEditingController(text: edu?.details ?? '');
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(isEdit ? "Edit Education" : "Add Education"),
         content: SizedBox(
           width: 500,
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: "Client Name")),
+                TextField(controller: instCtrl, decoration: const InputDecoration(labelText: "Institution")),
                 const SizedBox(height: 12),
-                TextField(controller: compCtrl, decoration: const InputDecoration(labelText: "Company / Role")),
+                TextField(controller: degCtrl, decoration: const InputDecoration(labelText: "Degree / Course")),
                 const SizedBox(height: 12),
-                TextField(controller: commentCtrl, maxLines: 4, decoration: const InputDecoration(labelText: "Review Comment")),
+                TextField(controller: durCtrl, decoration: const InputDecoration(labelText: "Duration (e.g. 2019 - 2023)")),
                 const SizedBox(height: 12),
-                TextField(controller: ratingCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: "Rating (e.g. 5.0)")),
-                const SizedBox(height: 12),
-                TextField(controller: imgCtrl, decoration: const InputDecoration(labelText: "Client Photo (Unsplash link, network URL, or Base64)")),
+                TextField(controller: detCtrl, maxLines: 3, decoration: const InputDecoration(labelText: "Details / Achievements")),
               ],
             ),
           ),
@@ -788,26 +1098,559 @@ class _ReviewsTab extends StatelessWidget {
           TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
           ElevatedButton(
             onPressed: () async {
-              final newRef = ClientReference(
-                id: isEdit ? ref.id : 'ref-${DateTime.now().millisecondsSinceEpoch}',
-                clientName: nameCtrl.text.trim(),
-                clientCompany: compCtrl.text.trim(),
-                clientComment: commentCtrl.text.trim(),
-                clientRating: double.tryParse(ratingCtrl.text) ?? 5.0,
-                clientImage: imgCtrl.text.trim(),
+              final controller = Get.find<PortfolioController>();
+              final admin = Get.find<AdminController>();
+              final List<Education> newList = List.from(controller.education);
+
+              final newEdu = Education(
+                id: isEdit ? edu.id : 'edu-${DateTime.now().millisecondsSinceEpoch}',
+                institution: instCtrl.text.trim(),
+                degree: degCtrl.text.trim(),
+                duration: durCtrl.text.trim(),
+                details: detCtrl.text.trim(),
               );
 
-              final admin = Get.find<AdminController>();
-              bool success = false;
               if (isEdit) {
-                success = await admin.updateReference(newRef);
+                final idx = newList.indexWhere((e) => e.id == edu.id);
+                if (idx != -1) newList[idx] = newEdu;
               } else {
-                success = await admin.addReference(newRef);
+                newList.add(newEdu);
               }
 
+              final success = await admin.updateEducation(newList);
               if (success) {
                 Navigator.pop(context);
-                Get.snackbar('Success', 'Recommendation saved', backgroundColor: Colors.green, colorText: Colors.white);
+                Get.snackbar('Success', 'Education saved successfully', backgroundColor: Colors.green, colorText: Colors.white);
+              }
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// =======================
+// 6. WORK EXPERIENCE TAB
+// =======================
+class _ExperienceTab extends StatelessWidget {
+  final bool isDark;
+  const _ExperienceTab({required this.isDark});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<PortfolioController>();
+
+    return Obx(() {
+      final experienceList = controller.experience;
+
+      return Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Manage Work Experience",
+                  style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: PortfolioTheme.primary,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () => _openExperienceForm(context, null),
+                  icon: const Icon(Icons.add_rounded),
+                  label: const Text("Add New Experience"),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Expanded(
+              child: ListView.builder(
+                itemCount: experienceList.length,
+                itemBuilder: (context, index) {
+                  final exp = experienceList[index];
+                  return Card(
+                    color: isDark ? PortfolioTheme.surfaceDark.withOpacity(0.5) : Colors.white,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      title: Text(exp.role, style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
+                      subtitle: Text("${exp.company} (${exp.duration})"),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit_rounded, color: Colors.blueAccent),
+                            onPressed: () => _openExperienceForm(context, exp),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent),
+                            onPressed: () => _confirmDelete(context, index),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  void _confirmDelete(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Experience Record"),
+        content: const Text("Are you sure you want to delete this experience entry?"),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+            onPressed: () async {
+              final controller = Get.find<PortfolioController>();
+              final admin = Get.find<AdminController>();
+              final List<Experience> newList = List.from(controller.experience);
+              newList.removeAt(index);
+              final success = await admin.updateExperience(newList);
+              Navigator.pop(context);
+              if (success) {
+                Get.snackbar('Success', 'Experience entry deleted', backgroundColor: Colors.green, colorText: Colors.white);
+              }
+            },
+            child: const Text("Delete"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _openExperienceForm(BuildContext context, Experience? exp) {
+    final isEdit = exp != null;
+    final companyCtrl = TextEditingController(text: exp?.company ?? '');
+    final roleCtrl = TextEditingController(text: exp?.role ?? '');
+    final durCtrl = TextEditingController(text: exp?.duration ?? '');
+    final achCtrl = TextEditingController(text: exp?.achievements.join('\n') ?? '');
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(isEdit ? "Edit Experience" : "Add Experience"),
+        content: SizedBox(
+          width: 500,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(controller: companyCtrl, decoration: const InputDecoration(labelText: "Company")),
+                const SizedBox(height: 12),
+                TextField(controller: roleCtrl, decoration: const InputDecoration(labelText: "Role")),
+                const SizedBox(height: 12),
+                TextField(controller: durCtrl, decoration: const InputDecoration(labelText: "Duration")),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: achCtrl,
+                  maxLines: 5,
+                  decoration: const InputDecoration(
+                    labelText: "Achievements (one per line)",
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+          ElevatedButton(
+            onPressed: () async {
+              final controller = Get.find<PortfolioController>();
+              final admin = Get.find<AdminController>();
+              final List<Experience> newList = List.from(controller.experience);
+
+              final newExp = Experience(
+                id: isEdit ? exp.id : 'exp-${DateTime.now().millisecondsSinceEpoch}',
+                company: companyCtrl.text.trim(),
+                role: roleCtrl.text.trim(),
+                duration: durCtrl.text.trim(),
+                achievements: achCtrl.text.split('\n').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
+              );
+
+              if (isEdit) {
+                final idx = newList.indexWhere((e) => e.id == exp.id);
+                if (idx != -1) newList[idx] = newExp;
+              } else {
+                newList.add(newExp);
+              }
+
+              final success = await admin.updateExperience(newList);
+              if (success) {
+                Navigator.pop(context);
+                Get.snackbar('Success', 'Experience saved successfully', backgroundColor: Colors.green, colorText: Colors.white);
+              }
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// =======================
+// 7. SKILLS TAB
+// =======================
+class _SkillsTab extends StatelessWidget {
+  final bool isDark;
+  const _SkillsTab({required this.isDark});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<PortfolioController>();
+
+    return Obx(() {
+      final skillsList = controller.skills;
+
+      return Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Manage Skills & Expertise",
+                  style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: PortfolioTheme.primary,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () => _openSkillForm(context, null),
+                  icon: const Icon(Icons.add_rounded),
+                  label: const Text("Add Skill Category"),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Expanded(
+              child: ListView.builder(
+                itemCount: skillsList.length,
+                itemBuilder: (context, index) {
+                  final skill = skillsList[index];
+                  return Card(
+                    color: isDark ? PortfolioTheme.surfaceDark.withOpacity(0.5) : Colors.white,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      title: Text(skill.category, style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
+                      subtitle: Text(skill.items.join(', ')),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit_rounded, color: Colors.blueAccent),
+                            onPressed: () => _openSkillForm(context, skill),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent),
+                            onPressed: () => _confirmDelete(context, index),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  void _confirmDelete(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Skill Category"),
+        content: const Text("Are you sure you want to delete this skill category?"),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+            onPressed: () async {
+              final controller = Get.find<PortfolioController>();
+              final admin = Get.find<AdminController>();
+              final List<SkillCategory> newList = List.from(controller.skills);
+              newList.removeAt(index);
+              final success = await admin.updateSkills(newList);
+              Navigator.pop(context);
+              if (success) {
+                Get.snackbar('Success', 'Skill category deleted', backgroundColor: Colors.green, colorText: Colors.white);
+              }
+            },
+            child: const Text("Delete"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _openSkillForm(BuildContext context, SkillCategory? cat) {
+    final isEdit = cat != null;
+    final catCtrl = TextEditingController(text: cat?.category ?? '');
+    final itemsCtrl = TextEditingController(text: cat?.items.join(', ') ?? '');
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(isEdit ? "Edit Skill Category" : "Add Skill Category"),
+        content: SizedBox(
+          width: 500,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(controller: catCtrl, decoration: const InputDecoration(labelText: "Category Name (e.g. Mobile Development)")),
+              const SizedBox(height: 12),
+              TextField(
+                controller: itemsCtrl,
+                decoration: const InputDecoration(
+                  labelText: "Skills (comma separated, e.g. Flutter, Dart, Android)",
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+          ElevatedButton(
+            onPressed: () async {
+              final controller = Get.find<PortfolioController>();
+              final admin = Get.find<AdminController>();
+              final List<SkillCategory> newList = List.from(controller.skills);
+
+              final newCat = SkillCategory(
+                category: catCtrl.text.trim(),
+                items: itemsCtrl.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
+              );
+
+              if (isEdit) {
+                final idx = newList.indexWhere((c) => c.category == cat.category);
+                if (idx != -1) newList[idx] = newCat;
+              } else {
+                newList.add(newCat);
+              }
+
+              final success = await admin.updateSkills(newList);
+              if (success) {
+                Navigator.pop(context);
+                Get.snackbar('Success', 'Skills saved successfully', backgroundColor: Colors.green, colorText: Colors.white);
+              }
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// =======================
+// 8. AI WORKFLOW TAB
+// =======================
+class _AiWorkflowTab extends StatelessWidget {
+  final bool isDark;
+  const _AiWorkflowTab({required this.isDark});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<PortfolioController>();
+
+    return Obx(() {
+      final aiList = controller.aiWorkflow;
+
+      return Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Manage AI Development Workflow",
+                  style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: PortfolioTheme.primary,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () => _openAiForm(context, null),
+                  icon: const Icon(Icons.add_rounded),
+                  label: const Text("Add Workflow Point"),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Expanded(
+              child: ListView.builder(
+                itemCount: aiList.length,
+                itemBuilder: (context, index) {
+                  final point = aiList[index];
+                  return Card(
+                    color: isDark ? PortfolioTheme.surfaceDark.withOpacity(0.5) : Colors.white,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      title: Text(point.title, style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
+                      subtitle: Text(point.description),
+                      leading: Chip(
+                        label: Text(point.icon),
+                        backgroundColor: PortfolioTheme.primary.withOpacity(0.1),
+                        labelStyle: const TextStyle(color: PortfolioTheme.primary, fontWeight: FontWeight.bold),
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit_rounded, color: Colors.blueAccent),
+                            onPressed: () => _openAiForm(context, point),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent),
+                            onPressed: () => _confirmDelete(context, index),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  void _confirmDelete(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete AI Workflow Point"),
+        content: const Text("Are you sure you want to delete this workflow point?"),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+            onPressed: () async {
+              final controller = Get.find<PortfolioController>();
+              final admin = Get.find<AdminController>();
+              final List<AiWorkflowPoint> newList = List.from(controller.aiWorkflow);
+              newList.removeAt(index);
+              final success = await admin.updateAiWorkflow(newList);
+              Navigator.pop(context);
+              if (success) {
+                Get.snackbar('Success', 'Workflow point deleted', backgroundColor: Colors.green, colorText: Colors.white);
+              }
+            },
+            child: const Text("Delete"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _openAiForm(BuildContext context, AiWorkflowPoint? point) {
+    final isEdit = point != null;
+    final titleCtrl = TextEditingController(text: point?.title ?? '');
+    final descCtrl = TextEditingController(text: point?.description ?? '');
+    String selectedIcon = point?.icon ?? 'code';
+
+    final List<String> iconOptions = [
+      'code',
+      'psychology',
+      'bolt',
+      'analytics',
+      'auto_awesome',
+      'bug_report'
+    ];
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(isEdit ? "Edit AI Workflow Point" : "Add AI Workflow Point"),
+        content: SizedBox(
+          width: 500,
+          child: StatefulBuilder(
+            builder: (context, setDialogState) => Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(controller: titleCtrl, decoration: const InputDecoration(labelText: "Title")),
+                const SizedBox(height: 12),
+                TextField(controller: descCtrl, maxLines: 3, decoration: const InputDecoration(labelText: "Description")),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  value: selectedIcon,
+                  decoration: const InputDecoration(labelText: "Icon Style"),
+                  items: iconOptions.map((String opt) {
+                    return DropdownMenuItem<String>(
+                      value: opt,
+                      child: Text(opt),
+                    );
+                  }).toList(),
+                  onChanged: (val) {
+                    if (val != null) {
+                      setDialogState(() {
+                        selectedIcon = val;
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+          ElevatedButton(
+            onPressed: () async {
+              final controller = Get.find<PortfolioController>();
+              final admin = Get.find<AdminController>();
+              final List<AiWorkflowPoint> newList = List.from(controller.aiWorkflow);
+
+              final newPoint = AiWorkflowPoint(
+                title: titleCtrl.text.trim(),
+                description: descCtrl.text.trim(),
+                icon: selectedIcon,
+              );
+
+              if (isEdit) {
+                final idx = newList.indexWhere((p) => p.title == point.title);
+                if (idx != -1) newList[idx] = newPoint;
+              } else {
+                newList.add(newPoint);
+              }
+
+              final success = await admin.updateAiWorkflow(newList);
+              if (success) {
+                Navigator.pop(context);
+                Get.snackbar('Success', 'AI Workflow saved', backgroundColor: Colors.green, colorText: Colors.white);
               }
             },
             child: const Text("Save"),

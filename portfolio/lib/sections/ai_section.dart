@@ -12,117 +12,110 @@ class AiSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<PortfolioController>();
     final size = MediaQuery.of(context).size;
-    final isDark = controller.isDarkMode.value;
     final isDesktop = ResponsiveWidget.isDesktop(context);
 
-    // Dynamic AI productivity points
-    final List<Map<String, dynamic>> aiPoints = [
-      {
-        "title": "AI-Assisted Development",
-        "description": "Utilizing advanced code generation tools to write boilerplate, speed up syntax declarations, and improve software delivery timeframes.",
-        "icon": Icons.code_rounded,
-      },
-      {
-        "title": "Prompt Engineering",
-        "description": "Formulating detailed, contextual prompts to extract high-quality code structures, solutions to algorithms, and mock dataset configurations.",
-        "icon": Icons.psychology_rounded,
-      },
-      {
-        "title": "Rapid Prototyping",
-        "description": "Spawning mock application mockups, state models, and JSON API payloads swiftly to demonstrate project feasibility in record time.",
-        "icon": Icons.bolt_rounded,
-      },
-      {
-        "title": "Requirement Analysis",
-        "description": "Summarizing lengthy software specifications and user stories to map architectural diagrams and draft precise database models.",
-        "icon": Icons.analytics_rounded,
-      },
-      {
-        "title": "Development Productivity",
-        "description": "Streamlining IDE setup workflows, script automation, and linter debugging to maintain optimal concentration on business logic coding.",
-        "icon": Icons.auto_awesome_rounded,
-      },
-      {
-        "title": "AI-Powered Debugging",
-        "description": "Analyzing stack traces and memory leaks with intelligent search queries to troubleshoot issues across multi-threaded operations quickly.",
-        "icon": Icons.bug_report_rounded,
+    IconData getIconData(String iconName) {
+      switch (iconName.toLowerCase()) {
+        case 'code':
+          return Icons.code_rounded;
+        case 'psychology':
+          return Icons.psychology_rounded;
+        case 'bolt':
+          return Icons.bolt_rounded;
+        case 'analytics':
+          return Icons.analytics_rounded;
+        case 'auto_awesome':
+          return Icons.auto_awesome_rounded;
+        case 'bug_report':
+          return Icons.bug_report_rounded;
+        default:
+          return Icons.auto_awesome_rounded;
       }
-    ];
+    }
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? size.width * 0.08 : 24.0,
-        vertical: 80.0,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Section Title
-          Row(
-            children: [
-              Container(
-                width: 32,
-                height: 4,
-                decoration: BoxDecoration(
-                  gradient: PortfolioTheme.primaryGradient,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                'AI Development Workflow',
-                style: GoogleFonts.outfit(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : PortfolioTheme.secondary,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            "How I leverage advanced AI agents and Large Language Models professionally to supercharge productivity:",
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 40),
+    return Obx(() {
+      final isDark = controller.isDarkMode.value;
+      final aiWorkflowList = controller.aiWorkflow;
 
-          // Grid Layout
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final double width = constraints.maxWidth;
-              int crossAxisCount = 1;
-              if (width >= 1000) {
-                crossAxisCount = 3;
-              } else if (width >= 600) {
-                crossAxisCount = 2;
-              }
+      if (aiWorkflowList.isEmpty) {
+        return const SizedBox();
+      }
 
-              return GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: aiPoints.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                  mainAxisExtent: 160,
+      return Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: isDesktop ? size.width * 0.08 : 24.0,
+          vertical: 80.0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Section Title
+            Row(
+              children: [
+                Container(
+                  width: 32,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    gradient: PortfolioTheme.primaryGradient,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
-                itemBuilder: (context, index) {
-                  final point = aiPoints[index];
-                  return _AiPointCard(
-                    title: point['title'],
-                    description: point['description'],
-                    icon: point['icon'],
-                    isDark: isDark,
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
-    );
+                const SizedBox(width: 12),
+                Text(
+                  'AI Development Workflow',
+                  style: GoogleFonts.outfit(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? Colors.white : PortfolioTheme.secondary,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              "How I leverage advanced AI agents and Large Language Models professionally to supercharge productivity:",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 40),
+
+            // Grid Layout
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final double width = constraints.maxWidth;
+                int crossAxisCount = 1;
+                if (width >= 1000) {
+                  crossAxisCount = 3;
+                } else if (width >= 600) {
+                  crossAxisCount = 2;
+                }
+
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: aiWorkflowList.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    mainAxisExtent: 160,
+                  ),
+                  itemBuilder: (context, index) {
+                    final point = aiWorkflowList[index];
+                    return _AiPointCard(
+                      title: point.title,
+                      description: point.description,
+                      icon: getIconData(point.icon),
+                      isDark: isDark,
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
