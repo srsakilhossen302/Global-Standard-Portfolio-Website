@@ -430,8 +430,6 @@ class _HeroGraphicState extends State<HeroGraphic> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<PortfolioController>();
-    final profile = controller.profile.value;
-    final hasProfileImage = profile != null && profile.profileImage.trim().isNotEmpty;
 
     return AnimatedBuilder(
       animation: _controller,
@@ -465,38 +463,42 @@ class _HeroGraphicState extends State<HeroGraphic> with SingleTickerProviderStat
               ),
             ),
             // Center Element / Icon / Profile Image
-            Container(
-              width: widget.size * 0.35,
-              height: widget.size * 0.35,
-              decoration: BoxDecoration(
-                color: PortfolioTheme.surfaceDark.withOpacity(0.85),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: PortfolioTheme.primary.withOpacity(0.4),
-                  width: 1.5,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+            Obx(() {
+              final profile = controller.profile.value;
+              final hasProfileImage = profile != null && profile.profileImage.trim().isNotEmpty;
+
+              return Container(
+                width: widget.size * 0.35,
+                height: widget.size * 0.35,
+                decoration: BoxDecoration(
+                  color: PortfolioTheme.surfaceDark.withOpacity(0.85),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: PortfolioTheme.primary.withOpacity(0.4),
+                    width: 1.5,
                   ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
                 child: hasProfileImage
-                    ? PortfolioImage(
-                        imageSource: profile.profileImage,
-                        fit: BoxFit.cover,
+                    ? ClipOval(
+                        child: PortfolioImage(
+                          imageSource: profile.profileImage,
+                          fit: BoxFit.cover,
+                        ),
                       )
                     : const Icon(
                         Icons.terminal_rounded,
                         color: Color(0xFF10B981),
                         size: 32,
                       ),
-              ),
-            ),
+              );
+            }),
           ],
         );
       },
