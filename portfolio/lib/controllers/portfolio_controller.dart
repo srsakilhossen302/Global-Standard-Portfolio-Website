@@ -8,7 +8,7 @@ import '../models/project_model.dart';
 import '../theme/portfolio_theme.dart';
 
 class PortfolioController extends GetxController {
-  static const String apiHost = 'http://localhost:5000/api';
+  static const String apiHost = 'https://global-standard-portfolio-website-backend.onrender.com/api';
 
   // Observable portfolio data
   final Rxn<Profile> profile = Rxn<Profile>();
