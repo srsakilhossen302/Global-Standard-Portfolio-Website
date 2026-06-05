@@ -3,7 +3,6 @@
 
 # Except these folders and files:
 !/portfolio/
-!/backend/
 !/.gitignore
 
 # Inner ignore rules for portfolio (Flutter)
